@@ -1237,109 +1237,6 @@
       gap: 12px;
     }
 
-    /* ==========================================================================
-       MODAL: DEMONSTRAÇÃO
-       ========================================================================== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      visibility: hidden;
-      transition: var(--transition-smooth);
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-card {
-      background: #ffffff;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 500px;
-      padding: 36px 32px;
-      position: relative;
-      box-shadow: var(--shadow-lg);
-      transform: scale(0.95);
-      transition: var(--transition-smooth);
-      color: var(--text-dark);
-    }
-
-    .modal-overlay.active .modal-card {
-      transform: scale(1);
-    }
-
-    .modal-close-btn {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      background: #f1f3f7;
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      color: #555;
-      transition: var(--transition-smooth);
-    }
-
-    .modal-close-btn:hover {
-      background: #e11d2e;
-      color: #fff;
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 8px;
-      color: var(--text-dark);
-    }
-
-    .modal-desc {
-      font-size: 13.5px;
-      color: var(--text-muted-light);
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 12.5px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #333;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid #dcdfe6;
-      font-family: inherit;
-      font-size: 14px;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--primary);
-      outline: none;
-    }
 
     /* Floating WhatsApp Button */
     .floating-whatsapp {
@@ -1428,7 +1325,9 @@
 
     @media (max-width: 860px) {
       header .container {
-        height: 70px;
+        height: 66px;
+        padding: 0 16px;
+        gap: 12px;
       }
 
       nav.nav-links {
@@ -1436,7 +1335,18 @@
       }
 
       .mobile-menu-btn {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .btn-ghost-header {
+        padding: 8px 14px;
+        font-size: 12.5px;
+        flex-shrink: 0;
+        white-space: nowrap;
+        gap: 6px;
       }
 
       .hero-grid {
@@ -1486,6 +1396,48 @@
       }
     }
 
+    @media (max-width: 600px) {
+      header .container {
+        height: 62px;
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .brand-logo {
+        gap: 8px;
+        min-width: 0;
+        flex-shrink: 1;
+      }
+
+      .brand-logo-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      .brand-logo-text .title {
+        font-size: 17px;
+        white-space: nowrap;
+      }
+
+      .brand-logo-text .subtitle {
+        display: none;
+      }
+
+      .btn-ghost-header {
+        padding: 7px 12px;
+        font-size: 11.5px;
+        border-radius: var(--radius-pill);
+        flex-shrink: 0;
+        white-space: nowrap;
+        gap: 5px;
+      }
+
+      .mobile-menu-btn {
+        font-size: 22px;
+        padding: 4px;
+      }
+    }
+
     @media (max-width: 540px) {
       .recursos-grid {
         grid-template-columns: 1fr;
@@ -1503,6 +1455,31 @@
         gap: 20px;
         flex-direction: column;
         align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 380px) {
+      header .container {
+        padding: 0 8px;
+        gap: 6px;
+      }
+
+      .brand-logo-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .brand-logo-text .title {
+        font-size: 15px;
+      }
+
+      .btn-ghost-header {
+        padding: 6px 9px;
+        font-size: 10.5px;
+      }
+
+      .btn-ghost-header .btn-arrow {
+        display: none;
       }
     }
 
@@ -2889,8 +2866,8 @@
         <a href="#contato">Contato &amp; Suporte</a>
       </nav>
 
-      <a href="https://app.viafacilvistoriaspro.com.br" target="_blank" rel="noopener" class="btn btn-ghost-header">
-        Teste o Aplicativo →
+      <a href="https://app.viafacilvistoriaspro.com.br" target="_blank" rel="noopener" class="btn btn-ghost-header" title="Acessar o aplicativo ViaFácil Vistorias PRO">
+        <span class="btn-text">Testar Aplicativo</span> <span class="btn-arrow">→</span>
       </a>
 
       <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu móvel">
@@ -2918,9 +2895,6 @@
             Transforme inspeções técnicas em laudos periciais, apontamento de não conformidades e propostas comerciais
             em minutos — mesmo sem internet.
           </p>
-          <a href="#demo" class="btn btn-primary open-modal-btn">
-            Conheça o ViaFácil Vistorias PRO →
-          </a>
         </div>
 
         <!-- Coluna Direita: Imagem do Inspetor com Tablet e Vitrine Viva -->
@@ -3514,7 +3488,7 @@
             </svg>
             <h3 class="recurso-card-title">Vistoria & Checklist</h3>
             <p class="recurso-card-desc">Checklists baseados nas normas ABNT e Instruções Técnicas.</p>
-            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+            <a href="#telas-app" class="recurso-link">Ver no app →</a>
           </div>
         </div>
 
@@ -3530,7 +3504,7 @@
             </svg>
             <h3 class="recurso-card-title">Fotos &amp; Não Conformidades</h3>
             <p class="recurso-card-desc">Registre fotos, vincule aos equipamentos e aponte não conformidades.</p>
-            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+            <a href="#telas-app" class="recurso-link">Ver no app →</a>
           </div>
         </div>
 
@@ -3548,7 +3522,7 @@
             <h3 class="recurso-card-title">Orçamento Automático</h3>
             <p class="recurso-card-desc">Converta as não conformidades em itens de fornecimento com cálculo automático.
             </p>
-            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+            <a href="#telas-app" class="recurso-link">Ver no app →</a>
           </div>
         </div>
 
@@ -3567,7 +3541,7 @@
             <h3 class="recurso-card-title">Laudo em PDF</h3>
             <p class="recurso-card-desc">Laudos técnicos com evidências fotográficas, diagnósticos e conformidade
               normativa.</p>
-            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+            <a href="#telas-app" class="recurso-link">Ver no app →</a>
           </div>
         </div>
       </div>
@@ -3874,7 +3848,7 @@
           <div class="step-mockup-box">
             <div style="color:#64748b; font-size:10px;">Proposta Comercial:</div>
             <div class="mockup-price-counter" style="font-size:15px; font-weight:800; color:#0f172a; margin:2px 0 6px;">R$ 12.840,00</div>
-            <a href="#demo" class="mockup-btn-sm open-modal-btn">Enviar por WhatsApp</a>
+            <a href="https://wa.me/5511973126247?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20o%20ViaF%C3%A1cil%20Vistorias%20PRO" target="_blank" rel="noopener" class="mockup-btn-sm">Enviar por WhatsApp</a>
           </div>
         </div>
       </div>
@@ -3925,7 +3899,7 @@
               📄 Laudo_Vistoria.pdf
             </div>
           </div>
-          <a href="#demo" class="btn btn-primary open-modal-btn" style="padding: 10px; font-size: 12px; width: 100%;">
+          <a href="https://wa.me/5511973126247?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20o%20ViaF%C3%A1cil%20Vistorias%20PRO" target="_blank" rel="noopener" class="btn btn-primary" style="padding: 10px; font-size: 12px; width: 100%;">
             Enviar em 1 Clique
           </a>
         </div>
@@ -4132,7 +4106,7 @@
         </div>
         <div>
           <a href="https://app.viafacilvistoriaspro.com.br" target="_blank" rel="noopener" class="btn btn-white">
-            Teste o Aplicativo →
+            Testar Aplicativo →
           </a>
         </div>
       </div>
@@ -4193,48 +4167,6 @@
     </svg>
   </a>
 
-  <!-- ==========================================================================
-       MODAL DE DEMONSTRAÇÃO
-       ========================================================================== -->
-  <div class="modal-overlay" id="demoModal">
-    <div class="modal-card">
-      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Fechar">&times;</button>
-      <h3 class="modal-title">Solicite uma Demonstração</h3>
-      <p class="modal-desc">Preencha seus dados para agendarmos uma apresentação personalizada do <strong>ViaFácil
-          Vistorias PRO</strong> para sua equipe.</p>
-
-      <form id="demoForm" onsubmit="event.preventDefault(); handleFormSubmit();">
-        <div class="form-group">
-          <label for="nome">Seu Nome Completo</label>
-          <input type="text" id="nome" placeholder="Eng. Carlos Silva" required>
-        </div>
-
-        <div class="form-group">
-          <label for="whatsapp">WhatsApp / Celular com DDD</label>
-          <input type="tel" id="whatsapp" placeholder="(11) 98765-4321" required>
-        </div>
-
-        <div class="form-group">
-          <label for="empresa">Nome da Empresa / Condomínio</label>
-          <input type="text" id="empresa" placeholder="Fire Engenharia & Laudos" required>
-        </div>
-
-        <div class="form-group">
-          <label for="volume">Volume aproximado de vistorias / mês</label>
-          <select id="volume">
-            <option value="1-10">Até 10 vistorias / mês</option>
-            <option value="11-30">De 11 a 30 vistorias / mês</option>
-            <option value="31-100">De 31 a 100 vistorias / mês</option>
-            <option value="100+">Mais de 100 vistorias / mês</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
-          Confirmar e Solicitar Demonstração →
-        </button>
-      </form>
-    </div>
-  </div>
 
   <!-- ==========================================================================
        MODAL DE ZOOM EM ALTA DEFINIÇÃO (LIGHTBOX PERICIAL DAS TELAS)
@@ -4296,48 +4228,8 @@
   <!-- ==========================================================================
        SCRIPTS: INTERAÇÕES & COMPORTAMENTO
        ========================================================================== -->
+
   <script>
-    // Modal behavior
-    const modal = document.getElementById('demoModal');
-    const closeBtn = document.getElementById('modalCloseBtn');
-    const openBtns = document.querySelectorAll('.open-modal-btn');
-
-    openBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
-
-    function handleFormSubmit() {
-      const nome = document.getElementById('nome').value;
-      const zap = document.getElementById('whatsapp').value;
-      const empresa = document.getElementById('empresa').value;
-      const volume = document.getElementById('volume').value;
-
-      const texto = encodeURIComponent(`Olá Alex e Raphael! Meu nome é ${nome}, da empresa ${empresa}. Gostaria de solicitar uma demonstração do ViaFácil Vistorias PRO. Meu WhatsApp de contato é ${zap} e realizamos cerca de ${volume} vistorias/mês.`);
-      const whatsappUrl = `https://wa.me/5511973126247?text=${texto}`;
-
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-      document.getElementById('demoForm').reset();
-
-      window.open(whatsappUrl, '_blank');
-    }
-
     // Smooth active menu indicator on scroll
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('nav.nav-links a');
