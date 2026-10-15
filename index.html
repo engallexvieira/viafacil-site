@@ -1,0 +1,4756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ViaFácil Vistorias PRO | Vistorias Inteligentes do Campo ao Orçamento</title>
+  <meta name="description"
+    content="Transforme inspeções técnicas em laudos periciais, apontamento de não conformidades e propostas comerciais em minutos — mesmo sem internet. Plataforma inteligente para segurança contra incêndio e pânico (SPCIP).">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/webp" href="images/shield_logo.webp">
+
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       RESET & BASE TOKENS
+       ========================================================================== */
+    :root {
+      --primary: #e11d2e;
+      --primary-hover: #c41322;
+      --primary-glow: rgba(225, 29, 46, 0.4);
+      --primary-subtle: rgba(225, 29, 46, 0.12);
+
+      --dark-bg: #090a0f;
+      --dark-surface: #10121a;
+      --dark-card: #151824;
+      --dark-border: rgba(255, 255, 255, 0.09);
+
+      --light-bg: #ffffff;
+      --light-surface: #f8f9fa;
+      --light-card: #ffffff;
+      --light-border: rgba(0, 0, 0, 0.08);
+
+      --text-white: #ffffff;
+      --text-muted-dark: #9da3af;
+      --text-dark: #0f1117;
+      --text-muted-light: #525a6c;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.15);
+      --shadow-red: 0 10px 28px rgba(225, 29, 46, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .red {
+      color: var(--primary);
+    }
+
+    /* ==========================================================================
+       BUTTONS & MICRO-INTERACTIONS
+       ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.3) 50%, transparent 80%);
+      transform: translateX(-150%);
+      transition: transform 0.6s ease;
+    }
+
+    .btn:hover::before {
+      transform: translateX(150%);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: 1px solid var(--primary);
+      box-shadow: var(--shadow-red);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(225, 29, 46, 0.5);
+    }
+
+    .btn-ghost-header {
+      background: var(--primary);
+      color: #fff;
+      border: 1px solid var(--primary);
+      padding: 11px 24px;
+      font-size: 13.5px;
+      box-shadow: 0 4px 16px rgba(225, 29, 46, 0.3);
+    }
+
+    .btn-ghost-header:hover {
+      background: #ff2a3b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(225, 29, 46, 0.55);
+    }
+
+    .btn-white {
+      background: #ffffff;
+      color: var(--text-dark);
+      border: 1px solid #ffffff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-white:hover {
+      background: #f1f3f7;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(9, 10, 15, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+      gap: 20px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+    }
+
+    .brand-logo-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-logo-text .title {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: #fff;
+    }
+
+    .brand-logo-text .subtitle {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-logo-text .subtitle span {
+      color: var(--primary);
+    }
+
+    nav.nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+
+    nav.nav-links a {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
+      position: relative;
+      padding: 6px 0;
+      transition: color 0.25s ease;
+    }
+
+    nav.nav-links a:hover,
+    nav.nav-links a.active {
+      color: #ffffff;
+    }
+
+    nav.nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    nav.nav-links a:hover::after,
+    nav.nav-links a.active::after {
+      width: 100%;
+    }
+
+    /* Mobile hamburger menu */
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      color: #fff;
+      font-size: 26px;
+      padding: 6px;
+    }
+
+    /* ==========================================================================
+       HERO SECTION (COM BLUEPRINT GRID & GLOW)
+       ========================================================================== */
+    .hero {
+      position: relative;
+      background-color: var(--dark-bg);
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        radial-gradient(1100px 650px at 78% 18%, rgba(225, 29, 46, 0.22) 0%, rgba(9, 10, 15, 0) 70%),
+        linear-gradient(180deg, #090a0f 0%, #0d0f17 100%);
+      background-size: 48px 48px, 48px 48px, auto, auto;
+      color: #fff;
+      padding: 70px 0 0;
+      overflow: hidden;
+    }
+
+    /* Máscara radial para suavizar as bordas do grid no Hero */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, transparent 20%, var(--dark-bg) 85%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero > .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+      min-height: 480px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+
+    .hero-title {
+      font-size: clamp(38px, 4.4vw, 56px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+
+    .hero-desc {
+      font-size: 16.5px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 480px;
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-image-wrap {
+      position: relative;
+      width: 100%;
+      height: 440px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(225, 29, 46, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transform: perspective(1000px) rotateY(-2deg);
+      transition: var(--transition-smooth);
+    }
+
+    .hero-image-wrap:hover {
+      transform: perspective(1000px) rotateY(0deg) translateY(-4px);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 60px rgba(225, 29, 46, 0.35);
+    }
+
+    .hero-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    /* Subtle red diagonal banner edge on image */
+    .hero-image-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(9, 10, 15, 0.3) 0%, transparent 60%, rgba(225, 29, 46, 0.15) 100%);
+      pointer-events: none;
+    }
+
+    /* Floating badge on hero image */
+    .hero-badge-tag {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(9, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(225, 29, 46, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-badge-tag .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+      animation: pulse 2s infinite;
+    }
+
+    /* ==========================================================================
+       HERO BOTTOM PILLARS (4 COLUMNS)
+       ========================================================================== */
+    .hero-pillars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 60px;
+      border-top: 1px solid var(--dark-border);
+      position: relative;
+    }
+
+    .pillar-item {
+      padding: 34px 28px;
+      border-right: 1px solid var(--dark-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .pillar-item:last-child {
+      border-right: none;
+    }
+
+    .pillar-item:first-child {
+      padding-left: 0;
+    }
+
+    .pillar-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+      transform: translateY(-4px);
+    }
+
+    .pillar-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .pillar-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .pillar-desc {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       SECTION 2: NOSSOS RECURSOS (LIGHT SECTION)
+       ========================================================================== */
+    .sec-light {
+      background: var(--light-bg);
+      color: var(--text-dark);
+      padding: 100px 0;
+    }
+
+    .sec-tag {
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+
+    .sec-title {
+      font-size: clamp(30px, 3.4vw, 44px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .sec-desc {
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: var(--text-muted-light);
+      max-width: 380px;
+    }
+
+    .red-line {
+      width: 38px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+      margin-top: 24px;
+    }
+
+    .recursos-split {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 50px;
+      align-items: flex-start;
+    }
+
+    .recursos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .recurso-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-smooth);
+    }
+
+    .recurso-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 50px rgba(225, 29, 46, 0.18);
+      border-color: rgba(225, 29, 46, 0.3);
+    }
+
+    .recurso-thumb {
+      height: 140px;
+      overflow: hidden;
+      position: relative;
+      background: #eef1f6;
+    }
+
+    .recurso-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .recurso-card:hover .recurso-thumb img {
+      transform: scale(1.08);
+    }
+
+    .recurso-body {
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .recurso-icon {
+      width: 28px;
+      height: 28px;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .recurso-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .recurso-card-desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-muted-light);
+      margin-bottom: 18px;
+      flex-grow: 1;
+    }
+
+    .recurso-link {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s ease;
+    }
+
+    .recurso-link:hover {
+      gap: 10px;
+    }
+
+    /* ==========================================================================
+       SECTION 3: POR QUE O VIAFÁCIL? (DARK SECTION WITH BUILDING)
+       ========================================================================== */
+    .sec-why {
+      position: relative;
+      background-color: #07080c;
+      color: #fff;
+      padding: 100px 0;
+      overflow: hidden;
+    }
+
+    .sec-why::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(7, 8, 12, 0.96) 35%, rgba(7, 8, 12, 0.75) 100%),
+        url('images/building_dusk.webp') center/cover no-repeat;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .sec-why .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .why-split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .why-desc {
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.78);
+      max-width: 440px;
+      margin-top: 24px;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .why-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .why-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(225, 29, 46, 0.5);
+      transform: translateY(-4px);
+    }
+
+    .why-card-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .why-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .why-card-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       SECTION 4: MULTIPLATAFORMA (DEVICES SHOWCASE)
+       ========================================================================== */
+    .sec-multi {
+      background: var(--light-surface);
+      padding: 100px 0;
+      color: var(--text-dark);
+    }
+
+    .multi-split {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .devices-display-container {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #ffffff;
+      padding: 16px;
+      transition: var(--transition-smooth);
+    }
+
+    .devices-display-container:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.14);
+    }
+
+    .devices-display-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .devices-labels-row {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .device-label-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .device-label-icon {
+      width: 34px;
+      height: 34px;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .device-label-text strong {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dark);
+    }
+
+    .device-label-text span {
+      font-size: 12px;
+      color: var(--text-muted-light);
+    }
+
+    /* ==========================================================================
+       SECTION 5: COMO FUNCIONA (UMA JORNADA. CINCO ETAPAS.)
+       ========================================================================== */
+    .sec-steps {
+      background: #ffffff;
+      padding: 100px 0;
+      color: var(--text-dark);
+    }
+
+    .steps-header {
+      margin-bottom: 54px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+
+    .step-card {
+      background: #fafbfe;
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      border-radius: var(--radius-md);
+      padding: 22px 18px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-smooth);
+    }
+
+    .step-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(225, 29, 46, 0.4);
+      box-shadow: 0 16px 40px rgba(225, 29, 46, 0.12);
+      background: #ffffff;
+    }
+
+    /* Chevron separator between cards */
+    .step-card:not(:last-child)::after {
+      content: "›";
+      position: absolute;
+      right: -13px;
+      top: 36px;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+      z-index: 5;
+    }
+
+    .step-num-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(225, 29, 46, 0.35);
+    }
+
+    .step-card-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      line-height: 1.25;
+      min-height: 36px;
+    }
+
+    .step-card-desc {
+      font-size: 11.5px;
+      line-height: 1.55;
+      color: var(--text-muted-light);
+      margin-bottom: 16px;
+      min-height: 36px;
+    }
+
+    /* Inner UI Mockup Box inside each step */
+    .step-mockup-box {
+      background: #ffffff;
+      border: 1px solid #e5e8ef;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      font-size: 11px;
+      margin-top: auto;
+    }
+
+    .mockup-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #f0f2f7;
+    }
+
+    .mockup-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .mockup-toggle {
+      width: 26px;
+      height: 14px;
+      background: #cbd5e1;
+      border-radius: 999px;
+      position: relative;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+
+    .mockup-toggle::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes toggleSwitch {
+      0%, 20% { background: #cbd5e1; }
+      30%, 90% { background: #16a34a; } /* Fica verde de aprovado */
+      100% { background: #cbd5e1; }
+    }
+
+    @keyframes toggleKnob {
+      0%, 20% { transform: translateX(-12px); }
+      30%, 90% { transform: translateX(0px); }
+      100% { transform: translateX(-12px); }
+    }
+
+    .mockup-item-row:nth-child(1) .mockup-toggle { animation: toggleSwitch 4s infinite 0s; }
+    .mockup-item-row:nth-child(1) .mockup-toggle::after { animation: toggleKnob 4s infinite 0s; }
+
+    .mockup-item-row:nth-child(2) .mockup-toggle { animation: toggleSwitch 4s infinite 0.6s; }
+    .mockup-item-row:nth-child(2) .mockup-toggle::after { animation: toggleKnob 4s infinite 0.6s; }
+
+    .mockup-item-row:nth-child(3) .mockup-toggle { animation: toggleSwitch 4s infinite 1.2s; }
+    .mockup-item-row:nth-child(3) .mockup-toggle::after { animation: toggleKnob 4s infinite 1.2s; }
+
+    .mockup-btn-sm {
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 10px;
+      margin-top: 6px;
+      display: block;
+    }
+
+    /* ==========================================================================
+       SECTION 6: RESULTADO FINAL (DO CAMPO AO CLIENTE)
+       ========================================================================== */
+    .sec-result {
+      background: var(--light-surface);
+      padding: 100px 0;
+      color: var(--text-dark);
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .result-visual-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .fanned-documents-card {
+      position: relative;
+      max-width: 440px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      transition: var(--transition-smooth);
+    }
+
+    .fanned-documents-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.18);
+    }
+
+    .fanned-documents-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .whatsapp-badge-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 22px 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.09);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      max-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: var(--transition-smooth);
+    }
+
+    .whatsapp-badge-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(37, 211, 102, 0.2);
+    }
+
+    .whatsapp-header-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .wa-icon-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 22px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+      animation: pulse-wa 2s infinite;
+    }
+
+    .wa-header-text h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.25;
+    }
+
+    .whatsapp-chat-preview {
+      background: #eef8f1;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #274033;
+      border-left: 3px solid #25d366;
+    }
+
+    .whatsapp-file-pill {
+      margin-top: 8px;
+      background: #ffffff;
+      border: 1px solid #cce8d5;
+      border-radius: 6px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 11px;
+      color: #128c7e;
+    }
+
+    /* ==========================================================================
+       SECTION 7: DIFERENCIAIS ESTRATÉGICOS (DARK SECTION)
+       ========================================================================== */
+    .sec-diferenciais {
+      background-color: #08090d;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      color: #ffffff;
+      padding: 100px 0;
+      border-top: 1px solid var(--dark-border);
+      position: relative;
+    }
+
+    .diferenciais-header {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+    .diferenciais-right-text {
+      border-left: 2px solid var(--primary);
+      padding-left: 24px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .diferenciais-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .diferencial-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: var(--transition-smooth);
+    }
+
+    .diferencial-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(225, 29, 46, 0.5);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(225, 29, 46, 0.15);
+    }
+
+    .diferencial-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .diferencial-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .diferencial-desc {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       SECTION 8: CALL TO ACTION BANNER (VIBRANT RED)
+       ========================================================================== */
+    .cta-banner {
+      background: linear-gradient(105deg, #a70c1a 0%, #e11d2e 50%, #950b16 100%);
+      color: #ffffff;
+      padding: 48px 0;
+      position: relative;
+      box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .cta-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .cta-text-left h3 {
+      font-size: clamp(24px, 2.6vw, 34px);
+      font-weight: 800;
+      line-height: 1.2;
+      max-width: 480px;
+    }
+
+    .cta-text-center {
+      font-size: 14.5px;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+
+    /* ==========================================================================
+       SECTION 9: FOOTER
+       ========================================================================== */
+    footer {
+      background: #06070a;
+      color: #ffffff;
+      padding: 50px 0 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+      padding-bottom: 30px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .footer-right-slogan {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .footer-right-slogan span {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      transition: var(--transition-smooth);
+    }
+
+    .social-btn:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.5);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       MODAL: DEMONSTRAÇÃO
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      padding: 36px 32px;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: var(--transition-smooth);
+      color: var(--text-dark);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: #f1f3f7;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #555;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-close-btn:hover {
+      background: #e11d2e;
+      color: #fff;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+    }
+
+    .modal-desc {
+      font-size: 13.5px;
+      color: var(--text-muted-light);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #dcdfe6;
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Floating WhatsApp Button */
+    .floating-whatsapp {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 30px;
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.5);
+      z-index: 999;
+      transition: var(--transition-smooth);
+      animation: pulse-wa 3s infinite;
+    }
+
+    .floating-whatsapp:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(37, 211, 102, 0.7);
+    }
+
+    /* Keyframes */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.9);
+      }
+    }
+
+    @keyframes pulse-wa {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+      }
+
+      50% {
+        transform: scale(1.06);
+        box-shadow: 0 8px 26px rgba(37, 211, 102, 0.7);
+      }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN (MEDIA QUERIES)
+       ========================================================================== */
+    @media (max-width: 1080px) {
+
+      .recursos-split,
+      .why-split,
+      .multi-split,
+      .result-grid,
+      .diferenciais-header {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .recursos-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .step-card:not(:last-child)::after {
+        display: none;
+      }
+
+      .diferenciais-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 860px) {
+      header .container {
+        height: 70px;
+      }
+
+      nav.nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-image-wrap {
+        height: 340px;
+        transform: none;
+      }
+
+      .hero-pillars {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pillar-item {
+        border-right: none;
+        border-bottom: 1px solid var(--dark-border);
+        padding: 24px 16px;
+      }
+
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .diferenciais-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta-flex {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-right-slogan {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .recursos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-pillars {
+        grid-template-columns: 1fr;
+      }
+
+      .diferenciais-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .devices-labels-row {
+        gap: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* ==========================================================================
+       SECTION: O QUE É A PLATAFORMA (CONCEPT & NORMS)
+       ========================================================================== */
+    .sec-concept {
+      background-color: var(--dark-bg);
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 50% 10%, rgba(225, 29, 46, 0.08) 0%, transparent 60%);
+      background-size: 48px 48px, 48px 48px, auto;
+      padding: 100px 0;
+      color: #ffffff;
+      border-bottom: 1px solid var(--dark-border);
+      position: relative;
+    }
+
+    .concept-header {
+      text-align: center;
+      max-width: 880px;
+      margin: 0 auto 55px;
+    }
+
+    .concept-tagline {
+      font-size: 17px;
+      color: #c5cbd8;
+      line-height: 1.7;
+      margin-top: 18px;
+    }
+
+    .concept-esteira-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 60px;
+    }
+
+    .concept-esteira-card {
+      background: var(--dark-surface);
+      border: 1px solid var(--dark-border);
+      border-radius: var(--radius-lg);
+      padding: 36px 28px;
+      position: relative;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .concept-esteira-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(225, 29, 46, 0.4);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(225, 29, 46, 0.15);
+    }
+
+    .concept-step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--primary-subtle);
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      align-self: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .concept-esteira-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .concept-esteira-card p {
+      font-size: 13.5px;
+      color: #c5cbd8;
+      line-height: 1.65;
+    }
+
+    /* Comparison Box: Antes vs Depois */
+    .comparison-box {
+      background: var(--dark-surface);
+      border: 1px solid var(--dark-border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-bottom: 60px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .comparison-title {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .comparison-col {
+      padding: 28px;
+      border-radius: var(--radius-md);
+      transition: var(--transition-smooth);
+    }
+
+    .col-before {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+    }
+
+    @property --angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes spinBeam {
+      to { --angle: 360deg; }
+    }
+
+    .col-after, .suporte-highlight-box {
+      position: relative;
+      border: 1px solid transparent !important;
+      background-clip: padding-box;
+    }
+
+    .col-after::before, .suporte-highlight-box::before {
+      content: "";
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(from var(--angle), transparent 65%, #e11d2e 90%, #ff8a93 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: spinBeam 5s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .col-after > *, .suporte-highlight-box > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .col-after {
+      background: rgba(225, 29, 46, 0.06);
+    }
+
+    .comparison-col-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-col-header h4 {
+      font-size: 15.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .col-before .comparison-col-header h4 {
+      color: #9da3af;
+    }
+
+    .col-after .comparison-col-header h4 {
+      color: #ff4d5a;
+    }
+
+    .comparison-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .comparison-list li {
+      font-size: 13.5px;
+      line-height: 1.55;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .col-before .comparison-list li {
+      color: #b0b7c6;
+    }
+
+    .col-after .comparison-list li {
+      color: #f1f3f7;
+    }
+
+    .comparison-list li strong {
+      color: #ffffff;
+    }
+
+    /* Normas Grid */
+    .normas-section {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--dark-border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+    }
+
+    .normas-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+
+    .normas-header h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .normas-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(225, 29, 46, 0.15);
+      color: #ff6b77;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(225, 29, 46, 0.3);
+    }
+
+    .normas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .norma-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: var(--transition-smooth);
+    }
+
+    .norma-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(225, 29, 46, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .norma-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .norma-code {
+      font-size: 11.5px;
+      color: #ff5260;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       SECTION: PARA QUEM É (TARGET AUDIENCE PERSONAS)
+       ========================================================================== */
+    .personas-header {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 50px;
+    }
+
+    .personas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-bottom: 70px;
+    }
+
+    .persona-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-md);
+      padding: 30px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .persona-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary);
+    }
+
+    .persona-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--primary-subtle);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .persona-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .persona-desc {
+      font-size: 12.5px;
+      color: var(--text-muted-light);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       SECTION: AUTORIA & CONTATOS
+       ========================================================================== */
+    .sec-contato-autores {
+      background: linear-gradient(180deg, var(--dark-bg) 0%, #0d0f17 100%);
+      padding: 100px 0 80px;
+      color: #ffffff;
+      position: relative;
+      border-top: 1px solid var(--dark-border);
+    }
+
+    .contato-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 60px;
+    }
+
+    .autores-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .autor-card {
+      background: var(--dark-surface);
+      border: 1px solid var(--dark-border);
+      border-radius: var(--radius-lg);
+      padding: 38px 32px;
+      transition: var(--transition-smooth);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+    }
+
+    .autor-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(225, 29, 46, 0.45);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 25px rgba(225, 29, 46, 0.15);
+    }
+
+    .autor-profile {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .autor-avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e11d2e 0%, #7d0a15 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 20px rgba(225, 29, 46, 0.35);
+      flex-shrink: 0;
+    }
+
+    .autor-meta h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .autor-role {
+      font-size: 13px;
+      color: #ff6b77;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .autor-desc {
+      font-size: 13.5px;
+      color: #c5cbd8;
+      line-height: 1.65;
+      margin-bottom: 26px;
+      flex-grow: 1;
+    }
+
+    .autor-channels {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-contact-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: var(--transition-smooth);
+      text-decoration: none;
+    }
+
+    .btn-contact-whatsapp {
+      background: rgba(37, 211, 102, 0.12);
+      color: #25d366;
+      border: 1px solid rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-contact-whatsapp:hover {
+      background: #25d366;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+    }
+
+    .btn-contact-email {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-contact-email:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .suporte-highlight-box {
+      background: linear-gradient(135deg, rgba(225, 29, 46, 0.15) 0%, rgba(16, 18, 26, 0.95) 100%);
+      border: 1px solid transparent;
+      background-clip: padding-box;
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .suporte-highlight-content {
+      max-width: 680px;
+    }
+
+    .suporte-highlight-content h4 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .suporte-highlight-content p {
+      font-size: 13.5px;
+      color: #c5cbd8;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 860px) {
+      .concept-esteira-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .autores-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .suporte-highlight-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* ==========================================================================
+       HERO VITRINE VIVA & AMBIENT GLOW
+       ========================================================================== */
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-ambient-glow {
+      position: absolute;
+      width: 130%;
+      height: 130%;
+      top: -15%;
+      left: -15%;
+      background: radial-gradient(circle at 60% 50%, rgba(225, 29, 46, 0.28) 0%, rgba(225, 29, 46, 0.08) 45%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(50px);
+      z-index: 0;
+      animation: glowPulse 7s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        transform: scale(0.92) translate(0, 0);
+        opacity: 0.7;
+      }
+
+      50% {
+        transform: scale(1.08) translate(10px, -8px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0.96) translate(-6px, 10px);
+        opacity: 0.8;
+      }
+    }
+
+    .hero-image-wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-float-badge {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      background: rgba(16, 18, 26, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(225, 29, 46, 0.18);
+      z-index: 3;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      cursor: default;
+    }
+
+    .hero-float-badge:hover {
+      border-color: rgba(225, 29, 46, 0.5);
+      transform: scale(1.04);
+    }
+
+    .badge-float-left {
+      top: 15%;
+      left: -32px;
+      animation: floatLeft 6s ease-in-out infinite;
+    }
+
+    .badge-float-right {
+      bottom: 12%;
+      right: -28px;
+      animation: floatRight 6.5s ease-in-out infinite;
+    }
+
+    @keyframes floatLeft {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(-1deg);
+      }
+    }
+
+    @keyframes floatRight {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(12px) rotate(1deg);
+      }
+    }
+
+    .float-badge-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(225, 29, 46, 0.15);
+      border: 1px solid rgba(225, 29, 46, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .float-badge-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .float-badge-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .float-badge-sub {
+      font-size: 11px;
+      color: #9da3af;
+      margin-top: 2px;
+    }
+
+    #heroRotatorText {
+      display: inline-block;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       APP SCREENS CAROUSEL (ESQUERDA PARA A DIREITA - LTR)
+       ========================================================================== */
+    .sec-carousel {
+      padding: 70px 0 90px;
+      background: linear-gradient(180deg, #090a0f 0%, #0d0f17 50%, #090a0f 100%);
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sec-carousel::before,
+    .sec-carousel::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .sec-carousel::before {
+      left: 0;
+      background: linear-gradient(90deg, #090a0f 0%, transparent 100%);
+    }
+
+    .sec-carousel::after {
+      right: 0;
+      background: linear-gradient(-90deg, #090a0f 0%, transparent 100%);
+    }
+
+    .carousel-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 36px;
+      padding: 0 20px;
+    }
+
+    .carousel-track-container {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      padding: 15px 0 25px;
+      cursor: grab;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 24px;
+      width: max-content;
+      animation: marquee-ltr 48s linear infinite;
+      will-change: transform;
+    }
+
+    .carousel-track-container:hover .carousel-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee-ltr {
+      0% {
+        transform: translateX(-50%);
+      }
+
+      100% {
+        transform: translateX(0%);
+      }
+    }
+
+    .app-screen-card {
+      width: 170px;
+      flex-shrink: 0;
+      background: rgba(21, 24, 36, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: 8px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+
+    .app-screen-card:hover {
+      transform: translateY(-6px) scale(1.04);
+      border-color: rgba(225, 29, 46, 0.6);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(225, 29, 46, 0.3);
+    }
+
+    .app-screen-card:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    .app-device-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+    }
+
+    .app-screen-zoom-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(14, 17, 27, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transform: translateY(-3px);
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .app-screen-card:hover .app-screen-zoom-badge {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .app-screen-img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .app-screen-card:hover .app-screen-img {
+      transform: scale(1.06);
+    }
+
+    .app-screen-caption {
+      padding: 8px 4px 2px;
+      text-align: center;
+    }
+
+    .app-screen-tag {
+      display: block;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--primary);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-screen-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .carousel-footer-note {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 12px;
+      color: var(--text-muted-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ==========================================================================
+       MODAL DE ZOOM EM ALTA RESOLUÇÃO (LIGHTBOX PERICIAL)
+       ========================================================================== */
+    .screen-lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 6, 12, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .screen-lightbox.active {
+      display: flex !important;
+    }
+
+    .lightbox-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 6, 12, 0.7);
+      cursor: pointer;
+    }
+
+    .lightbox-container {
+      position: relative;
+      z-index: 10;
+      width: 96%;
+      max-width: 1160px;
+      height: 94vh;
+      max-height: 900px;
+      display: flex;
+      flex-direction: column;
+      background: rgba(14, 17, 27, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 60px rgba(225, 29, 46, 0.22);
+      overflow: hidden;
+      animation: lightboxPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes lightboxPop {
+      0% {
+        transform: scale(0.95) translateY(10px);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .lightbox-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+      background: rgba(21, 25, 38, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .lightbox-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lightbox-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .lightbox-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+      margin: 0 0 4px 0;
+    }
+
+    .lightbox-desc {
+      font-size: 13px;
+      color: var(--text-muted-dark);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lightbox-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .lightbox-zoom-group {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .lightbox-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: rgba(255, 255, 255, 0.78);
+      padding: 6px 11px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .lightbox-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .lightbox-btn.active-zoom {
+      background: var(--primary) !important;
+      border-color: var(--primary) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(225, 29, 46, 0.5);
+    }
+
+    .lightbox-close {
+      font-size: 26px;
+      line-height: 1;
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9px;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-left: 2px;
+    }
+
+    .lightbox-close:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.06);
+    }
+
+    .lightbox-viewport {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: radial-gradient(circle at center, rgba(23, 27, 43, 0.8) 0%, rgba(9, 11, 18, 0.98) 100%);
+      padding: 0;
+      user-select: none;
+    }
+
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      background: rgba(14, 17, 27, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .lightbox-nav-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 10px 28px rgba(225, 29, 46, 0.5);
+    }
+
+    .lightbox-nav-btn.nav-prev { left: 18px; }
+    .lightbox-nav-btn.nav-next { right: 18px; }
+
+    .lightbox-img-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      overflow-x: auto;
+      position: relative;
+      padding: 25px 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(225, 29, 46, 0.6) rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modo 1: 100% Legível (Padrão ao abrir) - 680px de largura com nitidez total */
+    .lightbox-img {
+      width: 680px;
+      max-width: 95%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+      margin: 10px auto;
+      cursor: zoom-in;
+    }
+
+    /* Modo 2: Ajustado à Tela (Enquadra o celular por completo) */
+    .lightbox-img-wrapper.is-fitted {
+      align-items: center;
+      padding: 15px;
+    }
+
+    .lightbox-img-wrapper.is-fitted .lightbox-img {
+      max-height: calc(94vh - 170px);
+      width: auto;
+      max-width: 90%;
+      margin: auto;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+      cursor: zoom-in;
+    }
+
+    /* Modo 3: Super Zoom Máximo (150% - 1050px de largura para ver detalhes minuciosos) */
+    .lightbox-img-wrapper.is-super-zoom {
+      align-items: flex-start;
+    }
+
+    .lightbox-img-wrapper.is-super-zoom .lightbox-img {
+      width: 1050px;
+      max-width: none;
+      box-shadow: 0 35px 85px rgba(0, 0, 0, 0.95);
+      cursor: zoom-out;
+    }
+
+    .lightbox-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(21, 25, 38, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+      font-size: 12px;
+      color: var(--text-muted-dark);
+    }
+
+    .lightbox-counter {
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lightbox-hint-keys strong {
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .lightbox-container {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      .lightbox-header {
+        padding: 12px 14px;
+      }
+      .lightbox-title {
+        font-size: 15px;
+      }
+      .lightbox-desc {
+        display: none;
+      }
+      .lightbox-btn span {
+        display: none;
+      }
+      .lightbox-nav-btn {
+        width: 40px;
+        height: 40px;
+      }
+      .lightbox-nav-btn.nav-prev { left: 8px; }
+      .lightbox-nav-btn.nav-next { right: 8px; }
+      .lightbox-img-wrapper.is-zoomed .lightbox-img {
+        width: 100%;
+      }
+      .lightbox-footer {
+        padding: 10px 14px;
+      }
+      .lightbox-hint-keys {
+        display: none;
+      }
+    }
+
+    /* ==========================================================================
+       SCROLL REVEAL & STAGGER
+       ========================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.08s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.16s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: 0.24s;
+    }
+
+    .reveal-delay-4 {
+      transition-delay: 0.32s;
+    }
+
+    .reveal-delay-5 {
+      transition-delay: 0.40s;
+    }
+
+    /* ==========================================================================
+       SPOTLIGHT HOVER (APPLE / LINEAR STYLE)
+       ========================================================================== */
+    .spotlight-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: inherit;
+      background: radial-gradient(400px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(225, 29, 46, 0.12), transparent 45%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    .spotlight-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Upgrade no Spotlight: Borda Iluminada em Tempo Real */
+    .spotlight-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: radial-gradient(280px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(225, 29, 46, 0.75), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+
+    .spotlight-card:hover::after {
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       TIMELINE NAS 5 ETAPAS (COMO FUNCIONA)
+       ========================================================================== */
+    .steps-grid {
+      position: relative;
+    }
+
+    @media (min-width: 992px) {
+      .steps-grid::before {
+        content: '';
+        position: absolute;
+        top: 38px;
+        left: 6%;
+        right: 6%;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(225, 29, 46, 0.15) 0%, #e11d2e 50%, rgba(225, 29, 46, 0.15) 100%);
+        background-size: 200% 100%;
+        animation: beamMove 4s linear infinite;
+        box-shadow: 0 0 10px rgba(225, 29, 46, 0.5);
+        z-index: 0;
+      }
+    }
+
+    @keyframes beamMove {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .step-card {
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+    }
+
+    .step-num-badge {
+      position: relative;
+      z-index: 2;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step-card:hover .step-num-badge {
+      transform: scale(1.1);
+      box-shadow: 0 0 16px rgba(225, 29, 46, 0.4);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .badge-float-left {
+        left: -10px;
+        top: 5%;
+        padding: 8px 12px;
+      }
+
+      .badge-float-right {
+        right: -10px;
+        bottom: 5%;
+        padding: 8px 12px;
+      }
+
+      .float-badge-title {
+        font-size: 11.5px;
+      }
+
+      .float-badge-sub {
+        font-size: 10px;
+      }
+
+      .sec-carousel::before,
+      .sec-carousel::after {
+        width: 50px;
+      }
+
+      .app-screen-card {
+        width: 140px;
+        padding: 6px;
+        border-radius: 14px;
+      }
+
+      .app-screen-img {
+        height: 100%;
+        aspect-ratio: 1 / 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==========================================================================
+       HEADER
+       ========================================================================== -->
+  <header>
+    <div id="scrollProgressBar" style="position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg, #e11d2e, #ff6b77); width:0%; z-index:9999; box-shadow: 0 0 12px #e11d2e; transition: width 0.1s ease-out;"></div>
+    <div class="container">
+      <a href="#" class="brand-logo" aria-label="ViaFácil Vistorias PRO Início">
+        <div class="brand-logo-icon">
+          <img src="images/shield_logo.webp" alt="Logo ViaFácil">
+        </div>
+        <div class="brand-logo-text">
+          <span class="title">ViaFácil</span>
+          <span class="subtitle">VISTORIAS <span>PRO</span></span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#inicio" class="active">Início</a>
+        <a href="#telas-app">Telas do App</a>
+        <a href="#o-que-e">O Que É</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#para-quem">Para Quem É</a>
+        <a href="#como-funciona">Como Funciona</a>
+        <a href="#contato">Contato &amp; Suporte</a>
+      </nav>
+
+      <a href="https://app.viafacilvistoriaspro.com.br" target="_blank" rel="noopener" class="btn btn-ghost-header">
+        Teste o Aplicativo →
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu móvel">
+        ☰
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="hero" id="inicio">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Coluna Esquerda: Textos e CTA -->
+        <div class="hero-content">
+          <span class="hero-eyebrow">
+            PLATAFORMA INTELIGENTE PARA VISTORIAS TÉCNICAS
+          </span>
+          <h1 class="hero-title">
+            Vistorias inteligentes,<br>
+            <span class="red" id="heroRotatorText">do campo ao orçamento.</span>
+          </h1>
+          <p class="hero-desc">
+            Transforme inspeções técnicas em laudos periciais, apontamento de não conformidades e propostas comerciais
+            em minutos — mesmo sem internet.
+          </p>
+          <a href="#demo" class="btn btn-primary open-modal-btn">
+            Conheça o ViaFácil Vistorias PRO →
+          </a>
+        </div>
+
+        <!-- Coluna Direita: Imagem do Inspetor com Tablet e Vitrine Viva -->
+        <div class="hero-visual">
+          <div class="hero-ambient-glow"></div>
+          <div class="hero-image-wrap">
+            <img src="images/hero_inspector.webp"
+              alt="Inspetor técnico com tablet realizando vistoria em tubulações e extintores">
+            <div class="hero-badge-tag">
+              <span class="dot"></span>
+              <span>100% Offline-First em Campo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Pilares de Destaque -->
+      <div class="hero-pillars">
+        <!-- 01: Offline-First -->
+        <div class="pillar-item">
+          <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+            <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+          </svg>
+          <h3 class="pillar-title">Offline-First</h3>
+          <p class="pillar-desc">Funciona mesmo sem internet</p>
+        </div>
+
+        <!-- 02: Checklist Normativo -->
+        <div class="pillar-item">
+          <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+            <rect x="9" y="3" width="6" height="4" rx="2"></rect>
+            <path d="m9 14 2 2 4-4"></path>
+          </svg>
+          <h3 class="pillar-title">Checklist normativo</h3>
+          <p class="pillar-desc">Conformidade com ABNT e ITs</p>
+        </div>
+
+        <!-- 03: Orçamento Automático -->
+        <div class="pillar-item">
+          <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="16" y1="14" x2="16" y2="18"></line>
+            <path d="M16 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M8 14h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M8 18h.01"></path>
+          </svg>
+          <h3 class="pillar-title">Orçamento automático</h3>
+          <p class="pillar-desc">Materiais e mão de obra em minutos</p>
+        </div>
+
+        <!-- 04: Laudo Profissional -->
+        <div class="pillar-item">
+          <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <h3 class="pillar-title">Laudo profissional</h3>
+          <p class="pillar-desc">Pronto para o cliente, com evidências</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION: TELAS DO APP (CARROSSEL CONTÍNUO ESQUERDA PARA A DIREITA - LTR)
+       ========================================================================== -->
+  <section class="sec-carousel" id="telas-app">
+    <div class="container">
+      <div class="carousel-header">
+        <span class="sec-tag">A PLATAFORMA EM OPERAÇÃO</span>
+        <h2 class="sec-title" style="color: #ffffff;">
+          Veja o <span class="red">ViaFácil Vistorias PRO</span> por Dentro
+        </h2>
+        <div class="red-line" style="margin: 0 auto 16px;"></div>
+        <p class="concept-tagline">
+          Capturas 100% reais do aplicativo em operação de campo. Interface moderna, ágil e concebida para máxima
+          produtividade em tablets e celulares.
+        </p>
+      </div>
+    </div>
+
+    <div class="carousel-track-container" id="carouselTrackContainer">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- ================= CICLO 1 (8 TELAS REAIS DO APP) ================= -->
+        <!-- 01: Tela de Login -->
+        <div class="app-screen-card spotlight-card" data-screen-index="0" onclick="openScreenLightbox(0)" role="button" tabindex="0" aria-label="Ampliar tela 01: Tela de Login">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_1.webp" alt="Tela de Login e Autenticação" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">01 • Login</span>
+            <div class="app-screen-title">Tela de Login</div>
+          </div>
+        </div>
+
+        <!-- 02: Dashboard - Tela Inicial -->
+        <div class="app-screen-card spotlight-card" data-screen-index="1" onclick="openScreenLightbox(1)" role="button" tabindex="0" aria-label="Ampliar tela 02: Dashboard - Tela Inicial">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_2.webp" alt="Dashboard - Tela Inicial" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">02 • Dashboard</span>
+            <div class="app-screen-title">Dashboard Inicial</div>
+          </div>
+        </div>
+
+        <!-- 03: Tela de Clientes -->
+        <div class="app-screen-card spotlight-card" data-screen-index="2" onclick="openScreenLightbox(2)" role="button" tabindex="0" aria-label="Ampliar tela 03: Tela de Clientes">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_3.webp" alt="Tela de Clientes e Edificações" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">03 • Clientes</span>
+            <div class="app-screen-title">Gestão de Clientes</div>
+          </div>
+        </div>
+
+        <!-- 04: Tela de Vistoria - Checklist -->
+        <div class="app-screen-card spotlight-card" data-screen-index="3" onclick="openScreenLightbox(3)" role="button" tabindex="0" aria-label="Ampliar tela 04: Tela de Vistoria - Checklist">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_4.webp" alt="Tela de Vistoria e Checklist Normativo" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">04 • Vistoria</span>
+            <div class="app-screen-title">Checklist em Campo</div>
+          </div>
+        </div>
+
+        <!-- 05: Tela de Cadastro de Materiais -->
+        <div class="app-screen-card spotlight-card" data-screen-index="4" onclick="openScreenLightbox(4)" role="button" tabindex="0" aria-label="Ampliar tela 05: Tela de Cadastro de Materiais">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_5.webp" alt="Tela de Cadastro de Materiais" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">05 • Materiais</span>
+            <div class="app-screen-title">Cadastro de Materiais</div>
+          </div>
+        </div>
+
+        <!-- 06: Orçamento - 1ª Parte -->
+        <div class="app-screen-card spotlight-card" data-screen-index="5" onclick="openScreenLightbox(5)" role="button" tabindex="0" aria-label="Ampliar tela 06: Orçamento - 1ª Parte">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_6.webp" alt="Orçamento - 1ª Parte" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">06 • Orçamento 1</span>
+            <div class="app-screen-title">Orçamento (1ª Parte)</div>
+          </div>
+        </div>
+
+        <!-- 07: Orçamento - 2ª Parte -->
+        <div class="app-screen-card spotlight-card" data-screen-index="6" onclick="openScreenLightbox(6)" role="button" tabindex="0" aria-label="Ampliar tela 07: Orçamento - 2ª Parte">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_7.webp" alt="Orçamento - 2ª Parte" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">07 • Orçamento 2</span>
+            <div class="app-screen-title">Orçamento (2ª Parte)</div>
+          </div>
+        </div>
+
+        <!-- 08: Assistente de IA Especialista -->
+        <div class="app-screen-card spotlight-card" data-screen-index="7" onclick="openScreenLightbox(7)" role="button" tabindex="0" aria-label="Ampliar tela 08: Assistente de IA Especialista">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_8.webp" alt="Assistente de IA Especialista" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">08 • IA Pro</span>
+            <div class="app-screen-title">Assistente de IA</div>
+          </div>
+        </div>
+
+        <!-- ================= CICLO 2 (LOOP INFINITO PERFEITO) ================= -->
+        <!-- 01: Tela de Login -->
+        <div class="app-screen-card spotlight-card" data-screen-index="0" onclick="openScreenLightbox(0)" role="button" tabindex="0" aria-label="Ampliar tela 01: Tela de Login">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_1.webp" alt="Tela de Login e Autenticação" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">01 • Login</span>
+            <div class="app-screen-title">Tela de Login</div>
+          </div>
+        </div>
+
+        <!-- 02: Dashboard - Tela Inicial -->
+        <div class="app-screen-card spotlight-card" data-screen-index="1" onclick="openScreenLightbox(1)" role="button" tabindex="0" aria-label="Ampliar tela 02: Dashboard - Tela Inicial">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_2.webp" alt="Dashboard - Tela Inicial" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">02 • Dashboard</span>
+            <div class="app-screen-title">Dashboard Inicial</div>
+          </div>
+        </div>
+
+        <!-- 03: Tela de Clientes -->
+        <div class="app-screen-card spotlight-card" data-screen-index="2" onclick="openScreenLightbox(2)" role="button" tabindex="0" aria-label="Ampliar tela 03: Tela de Clientes">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_3.webp" alt="Tela de Clientes e Edificações" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">03 • Clientes</span>
+            <div class="app-screen-title">Gestão de Clientes</div>
+          </div>
+        </div>
+
+        <!-- 04: Tela de Vistoria - Checklist -->
+        <div class="app-screen-card spotlight-card" data-screen-index="3" onclick="openScreenLightbox(3)" role="button" tabindex="0" aria-label="Ampliar tela 04: Tela de Vistoria - Checklist">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_4.webp" alt="Tela de Vistoria e Checklist Normativo" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">04 • Vistoria</span>
+            <div class="app-screen-title">Checklist em Campo</div>
+          </div>
+        </div>
+
+        <!-- 05: Tela de Cadastro de Materiais -->
+        <div class="app-screen-card spotlight-card" data-screen-index="4" onclick="openScreenLightbox(4)" role="button" tabindex="0" aria-label="Ampliar tela 05: Tela de Cadastro de Materiais">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_5.webp" alt="Tela de Cadastro de Materiais" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">05 • Materiais</span>
+            <div class="app-screen-title">Cadastro de Materiais</div>
+          </div>
+        </div>
+
+        <!-- 06: Orçamento - 1ª Parte -->
+        <div class="app-screen-card spotlight-card" data-screen-index="5" onclick="openScreenLightbox(5)" role="button" tabindex="0" aria-label="Ampliar tela 06: Orçamento - 1ª Parte">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_6.webp" alt="Orçamento - 1ª Parte" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">06 • Orçamento 1</span>
+            <div class="app-screen-title">Orçamento (1ª Parte)</div>
+          </div>
+        </div>
+
+        <!-- 07: Orçamento - 2ª Parte -->
+        <div class="app-screen-card spotlight-card" data-screen-index="6" onclick="openScreenLightbox(6)" role="button" tabindex="0" aria-label="Ampliar tela 07: Orçamento - 2ª Parte">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_7.webp" alt="Orçamento - 2ª Parte" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">07 • Orçamento 2</span>
+            <div class="app-screen-title">Orçamento (2ª Parte)</div>
+          </div>
+        </div>
+
+        <!-- 08: Assistente de IA Especialista -->
+        <div class="app-screen-card spotlight-card" data-screen-index="7" onclick="openScreenLightbox(7)" role="button" tabindex="0" aria-label="Ampliar tela 08: Assistente de IA Especialista">
+          <div class="app-device-frame">
+            <div class="app-screen-zoom-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>Zoom</span>
+            </div>
+            <img src="images/app_screen_8.webp" alt="Assistente de IA Especialista" class="app-screen-img" loading="lazy">
+          </div>
+          <div class="app-screen-caption">
+            <span class="app-screen-tag">08 • IA Pro</span>
+            <div class="app-screen-title">Assistente de IA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-footer-note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      <span>Passe o mouse para pausar • <strong>Clique em qualquer tela para dar Zoom e enxergar todos os detalhes</strong></span>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION: O QUE É O VIAFÁCIL VISTORIAS PRO
+       ========================================================================== -->
+  <section class="sec-concept" id="o-que-e">
+    <div class="container">
+      <div class="concept-header">
+        <span class="sec-tag">CONCEITO &amp; ENGENHARIA APLICADA</span>
+        <h2 class="sec-title" style="color: #ffffff;">
+          O que é o <span class="red">ViaFácil Vistorias PRO?</span>
+        </h2>
+        <div class="red-line" style="margin: 0 auto;"></div>
+        <p class="concept-tagline">
+          O <strong>ViaFácil Vistorias PRO</strong> é uma plataforma inteligente e integrada para engenharia de
+          segurança, projetada especificamente para o segmento de <strong>Sistemas de Proteção e Combate a Incêndio e
+            Pânico (SPCIP)</strong> e segurança ocupacional.
+        </p>
+      </div>
+
+      <!-- 3 Pilares da Esteira Digital -->
+      <div class="concept-esteira-grid">
+        <div class="concept-esteira-card spotlight-card reveal reveal-delay-1">
+          <span class="concept-step-badge">01. Coleta em Campo</span>
+          <h3>Trabalho de Campo 100% Offline-First</h3>
+          <p>
+            Funciona perfeitamente em locais sem sinal de internet (subsolos, garagens subterrâneas e zonas industriais
+            remotas). O técnico realiza checklists guiados, registra testes e fotografa não conformidades com
+            geolocalização e data/hora. Ao recuperar o sinal, todos os dados são sincronizados de forma transparente.
+          </p>
+        </div>
+
+        <div class="concept-esteira-card spotlight-card reveal reveal-delay-2">
+          <span class="concept-step-badge">02. Automação Comercial</span>
+          <h3>Da Não Conformidade ao Orçamento em 3 Minutos</h3>
+          <p>
+            O sistema transforma as não conformidades detectadas em itens de fornecimento pré-cadastrados (ex: recargas
+            de extintores, teste hidrostático de mangueiras, troca de esguicho, baterias de iluminação), calculando
+            peças, custos, mão de obra e margem de lucro com precisão matemática.
+          </p>
+        </div>
+
+        <div class="concept-esteira-card spotlight-card reveal reveal-delay-3">
+          <span class="concept-step-badge">03. Laudos Periciais</span>
+          <h3>Laudo Timbrado e White-Label</h3>
+          <p>
+            Emita instantaneamente propostas comerciais e laudos técnicos periciais com a logomarca da sua empresa,
+            responsável técnico e dados completos de registro profissional. Tudo pronto para envio via WhatsApp antes
+            mesmo de sair da edificação do cliente.
+          </p>
+        </div>
+      </div>
+
+      <!-- Comparativo Antes vs Depois: Dores do Mercado Resolvidas -->
+      <div class="comparison-box">
+        <h3 class="comparison-title">
+          Dores Crônicas do Mercado <span class="red">vs.</span> A Solução ViaFácil
+        </h3>
+        <div class="comparison-grid">
+          <!-- Modelo Tradicional -->
+          <div class="comparison-col col-before">
+            <div class="comparison-col-header">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9da3af" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="9" y2="15"></line>
+              </svg>
+              <h4>Como o Mercado Ainda Faz (Modelo Antigo)</h4>
+            </div>
+            <ul class="comparison-list">
+              <li>
+                <span>❌</span>
+                <span><strong>3 a 5 horas de retrabalho noturno:</strong> Redigindo laudos no Word e tabelas no Excel
+                  após o expediente de trabalho.</span>
+              </li>
+              <li>
+                <span>❌</span>
+                <span><strong>Pranchetas e anotações em papel:</strong> Folhas rasuradas, ilegíveis ou perdidas durante
+                  a vistoria de campo.</span>
+              </li>
+              <li>
+                <span>❌</span>
+                <span><strong>Galeria do celular caótica:</strong> Dezenas de fotos misturadas sem identificação de
+                  pavimento ou equipamento.</span>
+              </li>
+              <li>
+                <span>❌</span>
+                <span><strong>Demora no envio comercial:</strong> Dias para enviar uma proposta, perdendo o timing e
+                  esfriando o fechamento com o síndico.</span>
+              </li>
+              <li>
+                <span>❌</span>
+                <span><strong>Erros de orçamentação:</strong> Esquecimento de peças, erros no cálculo de frete ou margem
+                  de lucro comprometida.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Com o ViaFácil -->
+          <div class="comparison-col col-after">
+            <div class="comparison-col-header">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h4>Com o ViaFácil Vistorias PRO</h4>
+            </div>
+            <ul class="comparison-list">
+              <li>
+                <span>✅</span>
+                <span><strong>Fim do retrabalho noturno:</strong> O laudo pericial e a proposta saem 100% prontos no ato
+                  da vistoria.</span>
+              </li>
+              <li>
+                <span>✅</span>
+                <span><strong>100% digital e sem papel:</strong> Coleta guiada e estruturada no tablet ou celular, mesmo
+                  sem internet.</span>
+              </li>
+              <li>
+                <span>✅</span>
+                <span><strong>Fotos organizadas:</strong> Cada evidência vinculada diretamente ao andar, equipamento e
+                  data/hora.</span>
+              </li>
+              <li>
+                <span>✅</span>
+                <span><strong>Orçamento em 3 minutos:</strong> Disparo da proposta em PDF via WhatsApp na portaria,
+                  aumentando em até 70% a taxa de fechamento.</span>
+              </li>
+              <li>
+                <span>✅</span>
+                <span><strong>Autoridade e White-Label:</strong> Documento timbrado profissional com sua identidade visual,
+                  logomarca e dados do responsável técnico.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conformidade Normativa com ITs Bombeiros e ABNT -->
+      <div class="normas-section">
+        <div class="normas-header">
+          <div>
+            <h3>Conformidade com Normas Brasileiras e Instruções Técnicas</h3>
+            <p style="font-size: 13px; color: var(--text-muted-dark); margin-top: 4px;">
+              A plataforma é estruturada com base nas exigências legais atualizadas dos Corpos de Bombeiros Militares e
+              da ABNT/NBR:
+            </p>
+          </div>
+          <span class="normas-badge">ABNT / NBR &amp; ITs Bombeiros Militar</span>
+        </div>
+
+        <div class="normas-grid">
+          <div class="norma-item">
+            <span class="norma-title">Extintores de Incêndio</span>
+            <span class="norma-code">IT-21 • NBR 12962 / NBR 15808</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Hidrantes e Mangueiras</span>
+            <span class="norma-code">IT-22 • NBR 13714 / NBR 12779</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Detecção e Alarme de Incêndio</span>
+            <span class="norma-code">IT-19 • NBR 17240</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Iluminação de Emergência</span>
+            <span class="norma-code">IT-18 • NBR 10898</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Sinalização Fotoluminescente</span>
+            <span class="norma-code">IT-20 • NBR 16820</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Portas Corta-Fogo e Saídas</span>
+            <span class="norma-code">IT-11 • NBR 11742 / NBR 9077</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Selagem de Shafts (Firestop)</span>
+            <span class="norma-code">IT-09 • NBR 6479</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Central e Instalações de Gás</span>
+            <span class="norma-code">IT-28 • NBR 15526 / NBR 13523</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Instalações Elétricas e Gerador</span>
+            <span class="norma-code">IT-41 • NBR 5410</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">SPDA e Aterramento (Para-raios)</span>
+            <span class="norma-code">IT-41 • NBR 5419:2015</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Chuveiros Automáticos (Sprinklers)</span>
+            <span class="norma-code">IT-23 • NBR 10897</span>
+          </div>
+          <div class="norma-item">
+            <span class="norma-title">Escadas Pressurizadas &amp; Brigada</span>
+            <span class="norma-code">IT-13 • IT-16 / NBR 15219</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 2: NOSSOS RECURSOS (LIGHT SECTION)
+       ========================================================================== */ -->
+  <section class="sec-light" id="recursos">
+    <div class="container recursos-split">
+      <!-- Coluna Esquerda: Título e Descrição -->
+      <div>
+        <span class="sec-tag">NOSSOS RECURSOS</span>
+        <h2 class="sec-title">
+          Tudo para sua vistoria<br>
+          <span class="red">em um só lugar.</span>
+        </h2>
+        <p class="sec-desc">
+          Da coleta de dados em campo à geração do laudo e proposta comercial, o ViaFácil Vistorias PRO reúne todas as
+          ferramentas que você precisa, com agilidade, organização e conformidade com as normas.
+        </p>
+        <div class="red-line"></div>
+      </div>
+
+      <!-- Coluna Direita: 4 Cards com Imagens -->
+      <div class="recursos-grid">
+        <!-- Card 1: Vistoria & Checklist -->
+        <div class="recurso-card reveal reveal-delay-1">
+          <div class="recurso-thumb">
+            <img src="images/card_checklist.webp" alt="Vistoria e Checklist no celular">
+          </div>
+          <div class="recurso-body">
+            <svg class="recurso-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+              <rect x="9" y="3" width="6" height="4" rx="2"></rect>
+              <path d="m9 14 2 2 4-4"></path>
+            </svg>
+            <h3 class="recurso-card-title">Vistoria & Checklist</h3>
+            <p class="recurso-card-desc">Checklists baseados nas normas ABNT e Instruções Técnicas.</p>
+            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+          </div>
+        </div>
+
+        <!-- Card 2: Fotos & Não-Conformidades -->
+        <div class="recurso-card reveal reveal-delay-2">
+          <div class="recurso-thumb">
+            <img src="images/card_inspection_pipes.webp" alt="Inspeção de tubulações e fotos de não conformidades">
+          </div>
+          <div class="recurso-body">
+            <svg class="recurso-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            <h3 class="recurso-card-title">Fotos &amp; Não Conformidades</h3>
+            <p class="recurso-card-desc">Registre fotos, vincule aos equipamentos e aponte não conformidades.</p>
+            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+          </div>
+        </div>
+
+        <!-- Card 3: Orçamento Automático -->
+        <div class="recurso-card reveal reveal-delay-3">
+          <div class="recurso-thumb">
+            <img src="images/card_laptop_budget.webp" alt="Orçamento automático no laptop">
+          </div>
+          <div class="recurso-body">
+            <svg class="recurso-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <h3 class="recurso-card-title">Orçamento Automático</h3>
+            <p class="recurso-card-desc">Converta as não conformidades em itens de fornecimento com cálculo automático.
+            </p>
+            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+          </div>
+        </div>
+
+        <!-- Card 4: Laudo em PDF -->
+        <div class="recurso-card reveal reveal-delay-4">
+          <div class="recurso-thumb">
+            <img src="images/card_report_desk.webp" alt="Laudo em PDF técnico na mesa">
+          </div>
+          <div class="recurso-body">
+            <svg class="recurso-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <h3 class="recurso-card-title">Laudo em PDF</h3>
+            <p class="recurso-card-desc">Laudos técnicos com evidências fotográficas, diagnósticos e conformidade
+              normativa.</p>
+            <a href="#demo" class="recurso-link open-modal-btn">Saiba mais →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 3: POR QUE O VIAFÁCIL? (DARK SECTION COM PRÉDIO)
+       ========================================================================== -->
+  <section class="sec-why" id="plataforma">
+    <div class="container why-split">
+      <div>
+        <span class="sec-tag" style="color: rgba(255,255,255,0.7);">POR QUE O VIAFÁCIL?</span>
+        <h2 class="sec-title" style="color: #fff;">
+          Menos retrabalho.<br>
+          Mais produtividade.<br>
+          <span class="red">Mais negócios.</span>
+        </h2>
+        <div class="red-line"></div>
+        <p class="why-desc">
+          Elimine as pranchetas, organize suas fotos por equipamento, converta automaticamente as não conformidades em
+          itens de fornecimento e envie a proposta antes de sair da edificação.
+        </p>
+      </div>
+
+      <div class="why-grid">
+        <!-- Item 1: Offline-First -->
+        <div class="why-card">
+          <svg class="why-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+            <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+          </svg>
+          <h3 class="why-card-title">Offline-First</h3>
+          <p class="why-card-desc">Trabalhe em qualquer local</p>
+        </div>
+
+        <!-- Item 2: Fotos organizadas -->
+        <div class="why-card">
+          <svg class="why-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <h3 class="why-card-title">Fotos organizadas</h3>
+          <p class="why-card-desc">Por equipamento, andar e data</p>
+        </div>
+
+        <!-- Item 3: Orçamento em minutos -->
+        <div class="why-card">
+          <svg class="why-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <h3 class="why-card-title">Orçamento em minutos</h3>
+          <p class="why-card-desc">Da vistoria para a proposta</p>
+        </div>
+
+        <!-- Item 4: White-label -->
+        <div class="why-card">
+          <svg class="why-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+          <h3 class="why-card-title">White-label</h3>
+          <p class="why-card-desc">Com a sua marca e identidade</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 4: PARA QUEM É & MULTIPLATAFORMA
+       ========================================================================== -->
+  <section class="sec-multi" id="para-quem">
+    <div class="container">
+      <!-- Público-Alvo: 5 Perfis Atendidos -->
+      <div class="personas-header">
+        <span class="sec-tag">PÚBLICO-ALVO &amp; MERCADO</span>
+        <h2 class="sec-title">
+          Para quem foi feito o <span class="red">ViaFácil Vistorias PRO?</span>
+        </h2>
+        <div class="red-line" style="margin: 0 auto 16px;"></div>
+        <p class="sec-desc">
+          Concebido para atender com rigor técnico às dores reais de quem atua no ecossistema de segurança contra
+          incêndio e engenharia predial:
+        </p>
+      </div>
+
+      <div class="personas-grid">
+        <!-- 01: Engenheiros Civis & Seg. Trabalho -->
+        <!-- 01: Engenheiros -->
+        <div class="persona-card spotlight-card reveal reveal-delay-1">
+          <div class="persona-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+              </path>
+            </svg>
+          </div>
+          <h3 class="persona-title">Engenheiros Civis &amp; de Segurança</h3>
+          <p class="persona-desc">Emissão de laudos periciais para renovação de AVCB/CLCB e projetos (PPCI), demandando
+            rigor técnico, conformidade legal e fundamentação normativa completa.</p>
+        </div>
+
+        <!-- 02: TSTs -->
+        <div class="persona-card spotlight-card reveal reveal-delay-2">
+          <div class="persona-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="persona-title">Técnicos em Segurança (TST)</h3>
+          <p class="persona-desc">Vistoriadores que realizam rotinas periódicas de inspeção preventiva em condomínios,
+            centros logísticos e plantas industriais.</p>
+        </div>
+
+        <!-- 03: Empresas de Recarga -->
+        <div class="persona-card spotlight-card reveal reveal-delay-3">
+          <div class="persona-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3 class="persona-title">Empresas de Recarga &amp; Manutenção</h3>
+          <p class="persona-desc">Prestadores de serviços em extintores e hidrantes que precisam orçar trocas de peças,
+            mangueiras, recargas e testes hidrostáticos no menor tempo possível.</p>
+        </div>
+
+        <!-- 04: Instaladoras e Manutenção Predial -->
+        <div class="persona-card spotlight-card reveal reveal-delay-4">
+          <div class="persona-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <h3 class="persona-title">Instaladoras &amp; Manutenção Predial</h3>
+          <p class="persona-desc">Empresas que instalam e realizam manutenção de iluminação de emergência, portas
+            corta-fogo, sinalizações fotoluminescentes e bombas de incêndio.</p>
+        </div>
+
+        <!-- 05: Administradoras e Síndicos -->
+        <div class="persona-card spotlight-card reveal reveal-delay-5">
+          <div class="persona-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="persona-title">Administradoras &amp; Síndicos</h3>
+          <p class="persona-desc">Beneficiários diretos através do Portal do Cliente White-label, acompanhando o
+            histórico de laudos, orçamentos e conformidades com total transparência.</p>
+        </div>
+      </div>
+
+      <!-- Bloco Multiplataforma -->
+      <div class="multi-split">
+        <div>
+          <span class="sec-tag">MULTIPLATAFORMA</span>
+          <h2 class="sec-title">
+            Seu escritório<br>
+            vai com você.
+          </h2>
+          <p class="sec-desc">
+            Acesse de qualquer dispositivo. Mesmo visual, mesma experiência, todas as suas vistorias sempre
+            sincronizadas.
+          </p>
+          <div class="red-line"></div>
+        </div>
+
+        <div class="devices-display-container">
+          <img src="images/multiplatform_devices.webp" alt="Plataforma ViaFácil no Desktop, Tablet e Smartphone">
+        </div>
+      </div>
+
+      <!-- Labels abaixo dos aparelhos -->
+      <div class="devices-labels-row">
+        <div class="device-label-item">
+          <svg class="device-label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <div class="device-label-text">
+            <strong>DESKTOP</strong>
+            <span>Mais visão e controle</span>
+          </div>
+        </div>
+
+        <div class="device-label-item">
+          <svg class="device-label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+          <div class="device-label-text">
+            <strong>TABLET (RETRATO)</strong>
+            <span>Ideal para o campo</span>
+          </div>
+        </div>
+
+        <div class="device-label-item">
+          <svg class="device-label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+          <div class="device-label-text">
+            <strong>SMARTPHONE</strong>
+            <span>Leve e sempre com você</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 5: COMO FUNCIONA (UMA JORNADA. CINCO ETAPAS.)
+       ========================================================================== -->
+  <section class="sec-steps" id="como-funciona">
+    <div class="container">
+      <div class="steps-header">
+        <span class="sec-tag">COMO FUNCIONA</span>
+        <h2 class="sec-title">
+          Uma jornada. <span class="red">Cinco etapas.</span>
+        </h2>
+      </div>
+
+      <div class="steps-grid">
+        <!-- Etapa 01 -->
+        <div class="step-card reveal reveal-delay-1">
+          <div class="step-num-badge">01</div>
+          <h3 class="step-card-title">Cliente e edificação</h3>
+          <p class="step-card-desc">Cadastre o cliente e os dados da edificação.</p>
+          <div class="step-mockup-box">
+            <div style="font-weight:700; color:#1e293b; margin-bottom:4px;">+ Novo Cliente</div>
+            <div style="color:#64748b; font-size:10px;">Nome:</div>
+            <div style="background:#f1f5f9; padding:3px 6px; border-radius:4px; font-weight:600; margin-bottom:4px;">
+              Condomínio Exemplo</div>
+            <div style="color:#64748b; font-size:10px;">Tipo:</div>
+            <div style="background:#f1f5f9; padding:3px 6px; border-radius:4px;">Residencial</div>
+          </div>
+        </div>
+
+        <!-- Etapa 02 -->
+        <div class="step-card reveal reveal-delay-2">
+          <div class="step-num-badge">02</div>
+          <h3 class="step-card-title">Checklist normativo offline</h3>
+          <p class="step-card-desc">Utilize checklists baseados nas normas ABNT e ITs.</p>
+          <div class="step-mockup-box">
+            <div class="mockup-item-row">
+              <span>Extintores</span>
+              <span class="mockup-toggle"></span>
+            </div>
+            <div class="mockup-item-row">
+              <span>Hidrantes</span>
+              <span class="mockup-toggle"></span>
+            </div>
+            <div class="mockup-item-row">
+              <span>Iluminação Emerg.</span>
+              <span class="mockup-toggle"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Etapa 03 -->
+        <div class="step-card reveal reveal-delay-3">
+          <div class="step-num-badge">03</div>
+          <h3 class="step-card-title">Fotos e não conformidades</h3>
+          <p class="step-card-desc">Registre fotos e vincule-as aos equipamentos.</p>
+          <div class="step-mockup-box" style="text-align:center;">
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
+              <span style="font-size:24px;">🧯</span>
+              <span style="background:#e2e8f0; padding:4px 8px; border-radius:6px; font-weight:700; font-size:11px;">📷
+                +2</span>
+            </div>
+            <div style="color:#64748b; font-size:10px; margin-top:4px;">Foto anexada ao item</div>
+          </div>
+        </div>
+
+        <!-- Etapa 04 -->
+        <div class="step-card reveal reveal-delay-4">
+          <div class="step-num-badge">04</div>
+          <h3 class="step-card-title">Conversão automática em itens</h3>
+          <p class="step-card-desc">As não conformidades viram itens de fornecimento no orçamento.</p>
+          <div class="step-mockup-box">
+            <div style="font-size:10.5px; font-weight:700; color:#1e293b;">Recarga Extintor ABC 6kg</div>
+            <div style="color:#16a34a; font-weight:700; margin-bottom:4px;">Total: R$ 85,00</div>
+            <div style="font-size:10.5px; font-weight:700; color:#1e293b;">Placa Fotoluminescente</div>
+            <div style="color:#16a34a; font-weight:700;">Total: R$ 32,00</div>
+          </div>
+        </div>
+
+        <!-- Etapa 05 -->
+        <div class="step-card reveal reveal-delay-5">
+          <div class="step-num-badge">05</div>
+          <h3 class="step-card-title">Fechamento comercial</h3>
+          <p class="step-card-desc">Gere e envie a proposta ainda em campo.</p>
+          <div class="step-mockup-box">
+            <div style="color:#64748b; font-size:10px;">Proposta Comercial:</div>
+            <div class="mockup-price-counter" style="font-size:15px; font-weight:800; color:#0f172a; margin:2px 0 6px;">R$ 12.840,00</div>
+            <a href="#demo" class="mockup-btn-sm open-modal-btn">Enviar por WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 6: RESULTADO FINAL (DO CAMPO AO CLIENTE)
+       ========================================================================== -->
+  <section class="sec-result">
+    <div class="container result-grid">
+      <div>
+        <span class="sec-tag">RESULTADO FINAL</span>
+        <h2 class="sec-title">
+          Do campo para o cliente,<br>
+          <span class="red">sem retrabalho.</span>
+        </h2>
+        <p class="sec-desc" style="max-width: 440px;">
+          Laudos técnicos completos, com diagnóstico de conformidade, evidências fotográficas, itens de adequação e
+          orçamento comercial detalhado.
+        </p>
+        <div class="red-line"></div>
+      </div>
+
+      <div class="result-visual-wrapper">
+        <!-- Imagem dos Laudos em 3D -->
+        <div class="fanned-documents-card">
+          <img src="images/technical_report_pages.webp"
+            alt="Laudo Técnico de Vistoria, Evidências Fotográficas e Orçamento Comercial">
+        </div>
+
+        <!-- Card WhatsApp -->
+        <div class="whatsapp-badge-card">
+          <div class="whatsapp-header-badge">
+            <div class="wa-icon-circle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+            </div>
+            <div class="wa-header-text">
+              <h4>Envio direto pelo WhatsApp</h4>
+            </div>
+          </div>
+          <div class="whatsapp-chat-preview">
+            "Olá! Segue o laudo técnico completo e a proposta comercial da vistoria."
+            <div class="whatsapp-file-pill">
+              📄 Laudo_Vistoria.pdf
+            </div>
+          </div>
+          <a href="#demo" class="btn btn-primary open-modal-btn" style="padding: 10px; font-size: 12px; width: 100%;">
+            Enviar em 1 Clique
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 7: DIFERENCIAIS ESTRATÉGICOS (DARK SECTION)
+       ========================================================================== -->
+  <section class="sec-diferenciais">
+    <div class="container">
+      <div class="diferenciais-header">
+        <div>
+          <span class="sec-tag">DIFERENCIAIS ESTRATÉGICOS</span>
+          <h2 class="sec-title" style="color: #fff; margin-bottom: 0;">
+            Muito mais que um checklist.
+          </h2>
+        </div>
+        <div class="diferenciais-right-text">
+          Um ecossistema completo para aumentar sua produtividade, organizar sua operação e gerar mais negócios.
+        </div>
+      </div>
+
+      <div class="diferenciais-grid">
+        <!-- 01: Portal do Cliente White-label -->
+        <div class="diferencial-card">
+          <svg class="diferencial-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <h3 class="diferencial-title">Portal do Cliente White-label</h3>
+          <p class="diferencial-desc">Seus clientes acompanham as vistorias e documentos com a sua marca.</p>
+        </div>
+
+        <!-- 02: CRM Kanban -->
+        <div class="diferencial-card">
+          <svg class="diferencial-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="5" height="18" rx="1"></rect>
+            <rect x="11" y="3" width="5" height="12" rx="1"></rect>
+            <rect x="19" y="3" width="5" height="8" rx="1"></rect>
+          </svg>
+          <h3 class="diferencial-title">CRM Kanban</h3>
+          <p class="diferencial-desc">Gerencie oportunidades, vistorias e propostas de forma visual.</p>
+        </div>
+
+        <!-- 03: Mapa de Calor Geográfico -->
+        <div class="diferencial-card">
+          <svg class="diferencial-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <h3 class="diferencial-title">Mapa de Calor Geográfico</h3>
+          <p class="diferencial-desc">Visualize suas vistorias no mapa e identifique novas oportunidades.</p>
+        </div>
+
+        <!-- 04: Assistente Privado de Notas -->
+        <div class="diferencial-card">
+          <svg class="diferencial-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <h3 class="diferencial-title">Assistente Privado de Notas (Post-It)</h3>
+          <p class="diferencial-desc">Anotações rápidas e lembretes pessoais da equipe.</p>
+        </div>
+
+        <!-- 05: Suporte Especialista Integrado -->
+        <div class="diferencial-card">
+          <svg class="diferencial-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="4"></circle>
+            <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+            <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+            <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+            <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+          </svg>
+          <h3 class="diferencial-title">Suporte Especialista Integrado</h3>
+          <p class="diferencial-desc">Suporte técnico e orientação de especialistas no segmento SPCIP.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 8: AUTORIA, ENGENHARIA & CANAIS DE CONTATO
+       ========================================================================== -->
+  <section class="sec-contato-autores" id="contato">
+    <div class="container">
+      <div class="contato-header">
+        <span class="sec-tag">AUTORIA, ENGENHARIA &amp; SUPORTE</span>
+        <h2 class="sec-title" style="color: #ffffff;">
+          Canais Diretos de <span class="red">Contato e Suporte</span>
+        </h2>
+        <div class="red-line" style="margin: 0 auto 16px;"></div>
+        <p class="concept-tagline">
+          Fale diretamente com os autores e especialistas responsáveis pela concepção, engenharia, consultoria técnica e
+          implantação do <strong>ViaFácil Vistorias PRO</strong>.
+        </p>
+      </div>
+
+      <div class="autores-grid">
+        <!-- Autor 1: Alex Soares Vieira -->
+        <div class="autor-card spotlight-card reveal reveal-delay-1">
+          <div class="autor-profile">
+            <div class="autor-avatar">AV</div>
+            <div class="autor-meta">
+              <h3>Alex Soares Vieira</h3>
+              <div class="autor-role">Eng. Civil, Seg. do Trabalho &amp; Dev Full-stack</div>
+            </div>
+          </div>
+          <p class="autor-desc">
+            Responsável pela arquitetura e desenvolvimento da plataforma, esteira de automação comercial, engenharia de
+            segurança ocupacional e experiência do usuário no trabalho de campo.
+          </p>
+          <div class="autor-channels">
+            <a href="https://wa.me/5511973126247?text=Ol%C3%A1%20Alex%2C%20gostaria%20de%20conversar%20sobre%20o%20ViaF%C3%A1cil%20Vistorias%20PRO"
+              target="_blank" rel="noopener" class="btn-contact-action btn-contact-whatsapp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              <span>WhatsApp: (11) 97312-6247</span>
+            </a>
+            <a href="mailto:contato@viafacilvistoriaspro.com.br" class="btn-contact-action btn-contact-email">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <span>E-mail: contato@viafacilvistoriaspro.com.br</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Autor 2: Raphael Barbosa Araújo -->
+        <div class="autor-card spotlight-card reveal reveal-delay-2">
+          <div class="autor-profile">
+            <div class="autor-avatar" style="background: linear-gradient(135deg, #b91c1c 0%, #450a0a 100%);">RA</div>
+            <div class="autor-meta">
+              <h3>Raphael Barbosa Araújo</h3>
+              <div class="autor-role">Especialista Técnico em Sistemas SPCIP</div>
+            </div>
+          </div>
+          <p class="autor-desc">
+            Consultor especialista em prevenção e combate a incêndio, conformidade com Instruções Técnicas dos Bombeiros
+            (ITs), normas ABNT e parametrização técnica do catálogo.
+          </p>
+          <div class="autor-channels">
+            <a href="https://wa.me/5511954460381?text=Ol%C3%A1%20Raphael%2C%20gostaria%20de%20conversar%20sobre%20o%20ViaF%C3%A1cil%20Vistorias%20PRO"
+              target="_blank" rel="noopener" class="btn-contact-action btn-contact-whatsapp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              <span>WhatsApp: (11) 95446-0381</span>
+            </a>
+            <a href="mailto:contato@viafacilvistoriaspro.com.br" class="btn-contact-action btn-contact-email">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <span>E-mail: contato@viafacilvistoriaspro.com.br</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atendimento Direto e Suporte Especialista -->
+      <div class="suporte-highlight-box">
+        <div class="suporte-highlight-content">
+          <h4>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Atendimento Direto &amp; Consultoria de Implantação
+          </h4>
+          <p>
+            Dúvidas técnicas sobre interpretação de Instruções Técnicas (ITs) do Corpo de Bombeiros Militar, suporte na
+            parametrização do catálogo de preços, configuração White-label ou consultoria em engenharia de incêndio
+            podem ser encaminhadas diretamente à equipe técnica por e-mail ou WhatsApp.
+          </p>
+        </div>
+        <a href="mailto:contato@viafacilvistoriaspro.com.br" class="btn btn-primary"
+          style="box-shadow: 0 4px 20px rgba(225, 29, 46, 0.4);">
+          Falar com a Equipe Técnica →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 9: PRE-FOOTER CALL TO ACTION (RED BANNER)
+       ========================================================================== -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-flex">
+        <div class="cta-text-left">
+          <h3>Sua próxima vistoria pode ser muito mais inteligente.</h3>
+        </div>
+        <div class="cta-text-center">
+          Leve o <strong>ViaFácil Vistorias PRO</strong><br>para sua operação de campo.
+        </div>
+        <div>
+          <a href="https://app.viafacilvistoriaspro.com.br" target="_blank" rel="noopener" class="btn btn-white">
+            Teste o Aplicativo →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <a href="#" class="brand-logo" aria-label="ViaFácil Vistorias PRO Início">
+          <div class="brand-logo-icon">
+            <img src="images/shield_logo.webp" alt="Logo ViaFácil">
+          </div>
+          <div class="brand-logo-text">
+            <span class="title">ViaFácil</span>
+            <span class="subtitle">VISTORIAS <span>PRO</span></span>
+          </div>
+        </a>
+
+        <div class="footer-links">
+          <a href="#inicio">Início</a>
+          <a href="#telas-app">Telas do App</a>
+          <a href="#o-que-e">O Que É</a>
+          <a href="#recursos">Recursos</a>
+
+          <a href="#para-quem">Para Quem É</a>
+          <a href="#como-funciona">Como Funciona</a>
+          <a href="#contato">Contato &amp; Suporte</a>
+        </div>
+
+        <div class="footer-right-slogan">
+          <span>Vistorias hoje.</span>
+          <span style="color: #fff; font-weight:700;">Mais segurança amanhã.</span>
+          <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; text-align: right;">
+            Alex Soares Vieira • Raphael Barbosa Araújo
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 ViaFácil Vistorias PRO. Todos os direitos reservados. Uso Técnico e Comercial Autorizado.</p>
+        <p>Desenvolvido para engenheiros, bombeiros civis, instaladoras e empresas de SPCIP.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FLOATING WHATSAPP BUTTON (CANAL DIRETO)
+       ========================================================================== -->
+  <a href="https://wa.me/5511973126247?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20o%20ViaF%C3%A1cil%20Vistorias%20PRO"
+    target="_blank" rel="noopener" class="floating-whatsapp" aria-label="Fale conosco no WhatsApp">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  </a>
+
+  <!-- ==========================================================================
+       MODAL DE DEMONSTRAÇÃO
+       ========================================================================== -->
+  <div class="modal-overlay" id="demoModal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Fechar">&times;</button>
+      <h3 class="modal-title">Solicite uma Demonstração</h3>
+      <p class="modal-desc">Preencha seus dados para agendarmos uma apresentação personalizada do <strong>ViaFácil
+          Vistorias PRO</strong> para sua equipe.</p>
+
+      <form id="demoForm" onsubmit="event.preventDefault(); handleFormSubmit();">
+        <div class="form-group">
+          <label for="nome">Seu Nome Completo</label>
+          <input type="text" id="nome" placeholder="Eng. Carlos Silva" required>
+        </div>
+
+        <div class="form-group">
+          <label for="whatsapp">WhatsApp / Celular com DDD</label>
+          <input type="tel" id="whatsapp" placeholder="(11) 98765-4321" required>
+        </div>
+
+        <div class="form-group">
+          <label for="empresa">Nome da Empresa / Condomínio</label>
+          <input type="text" id="empresa" placeholder="Fire Engenharia & Laudos" required>
+        </div>
+
+        <div class="form-group">
+          <label for="volume">Volume aproximado de vistorias / mês</label>
+          <select id="volume">
+            <option value="1-10">Até 10 vistorias / mês</option>
+            <option value="11-30">De 11 a 30 vistorias / mês</option>
+            <option value="31-100">De 31 a 100 vistorias / mês</option>
+            <option value="100+">Mais de 100 vistorias / mês</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          Confirmar e Solicitar Demonstração →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL DE ZOOM EM ALTA DEFINIÇÃO (LIGHTBOX PERICIAL DAS TELAS)
+       ========================================================================== -->
+  <div class="screen-lightbox" id="screenLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Visualizador Pericial de Telas do Aplicativo">
+    <div class="lightbox-backdrop" id="lightboxBackdrop" title="Clique para fechar"></div>
+    <div class="lightbox-container">
+      <!-- Header da Barra Superior -->
+      <div class="lightbox-header">
+        <div class="lightbox-info">
+          <span class="lightbox-tag" id="lightboxTag">01 • DASHBOARD</span>
+          <h3 class="lightbox-title" id="lightboxTitle">Painel Geral &amp; Vistorias</h3>
+          <p class="lightbox-desc" id="lightboxDesc">Visão consolidada de todas as vistorias abertas, clientes atendidos e ações pendentes.</p>
+        </div>
+        <div class="lightbox-actions">
+          <div class="lightbox-zoom-group" role="group" aria-label="Modos de Zoom Pericial">
+            <button type="button" class="lightbox-btn" id="btnZoomFit" title="Enquadrar tela inteira no monitor" onclick="applyZoomMode('fitted')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+              <span>Ajustar</span>
+            </button>
+            <button type="button" class="lightbox-btn active-zoom" id="btnZoom100" title="Visualização 100% legível com textos nítidos" onclick="applyZoomMode('readable')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              <span>100% Legível</span>
+            </button>
+            <button type="button" class="lightbox-btn" id="btnZoom150" title="Super Zoom para leitura de números e itens pequenos" onclick="applyZoomMode('super')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><path d="M11 8v6M8 11h6"></path><path d="M19 19l3 3"></path></svg>
+              <span>Super Zoom 150%</span>
+            </button>
+          </div>
+          <button type="button" class="lightbox-close" id="lightboxCloseBtn" onclick="closeScreenLightbox()" aria-label="Fechar visualizador" title="Fechar (ESC)">&times;</button>
+        </div>
+      </div>
+
+      <!-- Área Central da Imagem com Botões Anterior/Próximo -->
+      <div class="lightbox-viewport" id="lightboxViewport">
+        <button type="button" class="lightbox-nav-btn nav-prev" id="lightboxPrevBtn" onclick="navigateLightboxScreen(-1)" aria-label="Tela anterior" title="Tela anterior (Seta Esquerda)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+
+        <div class="lightbox-img-wrapper" id="lightboxImgWrapper" onclick="cycleZoomMode()" title="Clique na imagem para alternar o Zoom pericial">
+          <img src="" alt="" id="lightboxImg" class="lightbox-img">
+        </div>
+
+        <button type="button" class="lightbox-nav-btn nav-next" id="lightboxNextBtn" onclick="navigateLightboxScreen(1)" aria-label="Próxima tela" title="Próxima tela (Seta Direita)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Rodapé / Indicador de Posição -->
+      <div class="lightbox-footer">
+        <div class="lightbox-counter" id="lightboxCounter">Tela 1 de 7</div>
+        <div class="lightbox-hint-keys">
+          <span>Dica: <strong>Clique na imagem</strong> para alternar entre <strong>100% Legível</strong> e <strong>Super Zoom 150%</strong> • Navegue com <strong>←</strong> e <strong>→</strong> • <strong>ESC</strong> para fechar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SCRIPTS: INTERAÇÕES & COMPORTAMENTO
+       ========================================================================== -->
+  <script>
+    // Modal behavior
+    const modal = document.getElementById('demoModal');
+    const closeBtn = document.getElementById('modalCloseBtn');
+    const openBtns = document.querySelectorAll('.open-modal-btn');
+
+    openBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    function handleFormSubmit() {
+      const nome = document.getElementById('nome').value;
+      const zap = document.getElementById('whatsapp').value;
+      const empresa = document.getElementById('empresa').value;
+      const volume = document.getElementById('volume').value;
+
+      const texto = encodeURIComponent(`Olá Alex e Raphael! Meu nome é ${nome}, da empresa ${empresa}. Gostaria de solicitar uma demonstração do ViaFácil Vistorias PRO. Meu WhatsApp de contato é ${zap} e realizamos cerca de ${volume} vistorias/mês.`);
+      const whatsappUrl = `https://wa.me/5511973126247?text=${texto}`;
+
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('demoForm').reset();
+
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // Smooth active menu indicator on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      const scrollY = window.pageYOffset;
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        const sectionHeight = section.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    mobileBtn.addEventListener('click', () => {
+      const nav = document.querySelector('nav.nav-links');
+      if (nav.style.display === 'flex') {
+        nav.style.display = '';
+      } else {
+        nav.style.display = 'flex';
+        nav.style.flexDirection = 'column';
+        nav.style.position = 'absolute';
+        nav.style.top = '70px';
+        nav.style.left = '0';
+        nav.style.right = '0';
+        nav.style.background = '#090a0f';
+        nav.style.padding = '20px';
+        nav.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+      }
+    });
+
+    // ==========================================================================
+    // 1. HERO TEXT ROTATOR
+    // ==========================================================================
+    const rotatorPhrases = [
+      'do campo ao orçamento.',
+      'para Engenheiros e Peritos.',
+      'para Empresas de SPCIP.',
+      'para Vistoriadores e TST.',
+      'para Instaladoras e Manutenção.'
+    ];
+    let phraseIdx = 0;
+    const rotatorEl = document.getElementById('heroRotatorText');
+    if (rotatorEl) {
+      setInterval(() => {
+        rotatorEl.style.opacity = '0';
+        rotatorEl.style.transform = 'translateY(-6px)';
+        setTimeout(() => {
+          phraseIdx = (phraseIdx + 1) % rotatorPhrases.length;
+          rotatorEl.textContent = rotatorPhrases[phraseIdx];
+          rotatorEl.style.opacity = '1';
+          rotatorEl.style.transform = 'translateY(0)';
+        }, 320);
+      }, 3400);
+    }
+
+    // ==========================================================================
+    // 2. SCROLL REVEAL OBSERVER (NATIVO & LEVE)
+    // ==========================================================================
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.12
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ==========================================================================
+    // 3. SPOTLIGHT HOVER NOS CARDS ESCUROS (ESTILO APPLE / LINEAR)
+    // ==========================================================================
+    const spotlightCards = document.querySelectorAll('.spotlight-card');
+    spotlightCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+
+    // ==========================================================================
+    // 4. LIGHTBOX & ZOOM PERICIAL DAS TELAS DO APP
+    // ==========================================================================
+    const appScreensData = [
+      {
+        tag: '01 • ACESSO SEGURO',
+        title: 'Tela de Login & Autenticação',
+        desc: 'Acesso seguro do profissional à plataforma ViaFácil Vistorias PRO com credenciais protegidas e sincronização de dados.',
+        src: 'images/app_screen_1.webp',
+        alt: 'Tela de Login e Autenticação ViaFácil'
+      },
+      {
+        tag: '02 • DASHBOARD',
+        title: 'Dashboard - Tela Inicial',
+        desc: 'Painel operacional com indicadores de vistorias abertas, laudos em andamento, propostas comerciais e visão consolidada.',
+        src: 'images/app_screen_2.webp',
+        alt: 'Dashboard - Tela Inicial ViaFácil'
+      },
+      {
+        tag: '03 • CLIENTES',
+        title: 'Tela de Clientes & Edificações',
+        desc: 'Cadastro estruturado de condomínios, empresas e responsáveis técnicos, com histórico completo de vistorias.',
+        src: 'images/app_screen_3.webp',
+        alt: 'Tela de Clientes e Edificações ViaFácil'
+      },
+      {
+        tag: '04 • CHECKLIST',
+        title: 'Tela de Vistoria - Checklist Normativo',
+        desc: 'Itens de checagem estruturados com base nas normas ABNT e ITs dos Bombeiros, funcionando 100% offline em campo.',
+        src: 'images/app_screen_4.webp',
+        alt: 'Tela de Vistoria e Checklist Normativo'
+      },
+      {
+        tag: '05 • MATERIAIS',
+        title: 'Tela de Cadastro de Materiais',
+        desc: 'Gestão de extintores, mangueiras, hidrantes, sinalização e peças com tabela de custos e precificação configurável.',
+        src: 'images/app_screen_5.webp',
+        alt: 'Tela de Cadastro de Materiais e Peças'
+      },
+      {
+        tag: '06 • ORÇAMENTO (1ª PARTE)',
+        title: 'Orçamento - 1ª Parte (Quantitativos & Peças)',
+        desc: 'Levantamento automático de peças necessárias, substituições recomendadas e quantitativos apurados na vistoria.',
+        src: 'images/app_screen_6.webp',
+        alt: 'Orçamento Comercial - 1ª Parte Peças e Quantitativos'
+      },
+      {
+        tag: '07 • ORÇAMENTO (2ª PARTE)',
+        title: 'Orçamento - 2ª Parte (Totais & Margens)',
+        desc: 'Cálculo de margens comerciais, condições de pagamento, prazos de execução e consolidação do valor final da proposta.',
+        src: 'images/app_screen_7.webp',
+        alt: 'Orçamento Comercial - 2ª Parte Totais e Margens'
+      },
+      {
+        tag: '08 • IA ESPECIALISTA',
+        title: 'Assistente de IA Especialista',
+        desc: 'Inteligência Artificial embarcada para consulta de normas ABNT e ITs dos Bombeiros, dimensionamento e apoio pericial em campo.',
+        src: 'images/app_screen_8.webp',
+        alt: 'Assistente de IA Especialista em Segurança Contra Incêndio'
+      }
+    ];
+
+    let currentScreenIdx = 0;
+    let currentZoomMode = 'readable';
+
+    const screenLightbox = document.getElementById('screenLightbox');
+    const lightboxBackdrop = document.getElementById('lightboxBackdrop');
+    const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
+    const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
+    const lightboxNextBtn = document.getElementById('lightboxNextBtn');
+    const lightboxImgWrapper = document.getElementById('lightboxImgWrapper');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxTag = document.getElementById('lightboxTag');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDesc = document.getElementById('lightboxDesc');
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    const carouselTrack = document.getElementById('carouselTrack');
+
+    function applyZoomMode(mode) {
+      currentZoomMode = mode;
+      if (!lightboxImgWrapper) return;
+      lightboxImgWrapper.classList.remove('is-fitted', 'is-super-zoom');
+
+      const bFit = document.getElementById('btnZoomFit');
+      const b100 = document.getElementById('btnZoom100');
+      const b150 = document.getElementById('btnZoom150');
+
+      if (bFit) bFit.classList.remove('active-zoom');
+      if (b100) b100.classList.remove('active-zoom');
+      if (b150) b150.classList.remove('active-zoom');
+
+      if (mode === 'fitted') {
+        lightboxImgWrapper.classList.add('is-fitted');
+        if (bFit) bFit.classList.add('active-zoom');
+      } else if (mode === 'super') {
+        lightboxImgWrapper.classList.add('is-super-zoom');
+        if (b150) b150.classList.add('active-zoom');
+      } else {
+        // 'readable' mode (100% Legível) - padrão
+        if (b100) b100.classList.add('active-zoom');
+      }
+    }
+
+    function cycleZoomMode() {
+      if (currentZoomMode === 'fitted') {
+        applyZoomMode('readable');
+      } else if (currentZoomMode === 'readable') {
+        applyZoomMode('super');
+      } else {
+        applyZoomMode('readable');
+      }
+    }
+
+    function updateLightboxScreen(idx) {
+      currentScreenIdx = (idx + appScreensData.length) % appScreensData.length;
+      const data = appScreensData[currentScreenIdx];
+      if (!data) return;
+
+      if (lightboxTag) lightboxTag.textContent = data.tag;
+      if (lightboxTitle) lightboxTitle.textContent = data.title;
+      if (lightboxDesc) lightboxDesc.textContent = data.desc;
+      if (lightboxCounter) lightboxCounter.textContent = `Tela ${currentScreenIdx + 1} de ${appScreensData.length}`;
+
+      if (lightboxImg) {
+        lightboxImg.src = data.src;
+        lightboxImg.alt = data.alt;
+      }
+
+      // Abre SEMPRE em modo legível e posiciona o scroll no topo da tela do app
+      applyZoomMode('readable');
+      if (lightboxImgWrapper) {
+        lightboxImgWrapper.scrollTop = 0;
+        lightboxImgWrapper.scrollLeft = 0;
+      }
+    }
+
+    function openScreenLightbox(idx) {
+      if (!screenLightbox) return;
+      updateLightboxScreen(idx);
+      screenLightbox.classList.add('active');
+      screenLightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (carouselTrack) {
+        carouselTrack.style.animationPlayState = 'paused';
+      }
+    }
+
+    function closeScreenLightbox() {
+      if (!screenLightbox) return;
+      screenLightbox.classList.remove('active');
+      screenLightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      applyZoomMode('readable');
+      if (carouselTrack) {
+        carouselTrack.style.animationPlayState = '';
+      }
+    }
+
+    function navigateLightboxScreen(delta) {
+      updateLightboxScreen(currentScreenIdx + delta);
+    }
+
+    // Exposição global para chamadas inline (garante 100% de funcionamento)
+    window.openScreenLightbox = openScreenLightbox;
+    window.closeScreenLightbox = closeScreenLightbox;
+    window.applyZoomMode = applyZoomMode;
+    window.cycleZoomMode = cycleZoomMode;
+    window.navigateLightboxScreen = navigateLightboxScreen;
+
+    // Vincula eventos aos cards do carrossel
+    document.querySelectorAll('.app-screen-card').forEach(card => {
+      const idx = parseInt(card.getAttribute('data-screen-index'), 10) || 0;
+      card.addEventListener('click', () => {
+        openScreenLightbox(idx);
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openScreenLightbox(idx);
+        }
+      });
+    });
+
+    // Fechar ao clicar no backdrop ou botão fechar
+    if (lightboxCloseBtn) lightboxCloseBtn.addEventListener('click', closeScreenLightbox);
+    if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeScreenLightbox);
+
+    // Botões anterior / próximo
+    if (lightboxPrevBtn) {
+      lightboxPrevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navigateLightboxScreen(-1);
+      });
+    }
+
+    if (lightboxNextBtn) {
+      lightboxNextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navigateLightboxScreen(1);
+      });
+    }
+
+    // Navegação por teclado (ESC, Setas, Teclas de Zoom)
+    window.addEventListener('keydown', (e) => {
+      if (!screenLightbox || !screenLightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        closeScreenLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        navigateLightboxScreen(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigateLightboxScreen(1);
+      } else if (e.key === '+' || e.key === '=') {
+        applyZoomMode('super');
+      } else if (e.key === '-') {
+        applyZoomMode('fitted');
+      } else if (e.key === '0' || e.key === 'Enter') {
+        applyZoomMode('readable');
+      }
+    });
+
+    // ==========================================================================
+    // 5. EFEITO 3D PERSPECTIVE TILT REAL (FÍSICA NO MOUSE)
+    // ==========================================================================
+    const tiltElements = document.querySelectorAll('.hero-image-wrap, .fanned-documents-card, .devices-display-container');
+
+    tiltElements.forEach(el => {
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Calcula a rotação máxima de 6 graus
+        const rotateX = ((y - centerY) / centerY) * -6;
+        const rotateY = ((x - centerX) / centerX) * 6;
+        
+        el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        el.style.transition = 'transform 0.1s ease-out';
+      });
+
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        el.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      });
+    });
+
+    // ==========================================================================
+    // 6. BOTÕES MAGNÉTICOS (MAGNETIC CTAS)
+    // ==========================================================================
+    const magneticBtns = document.querySelectorAll('.btn-primary, .btn-ghost-header, .btn-white');
+
+    magneticBtns.forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        btn.style.transform = `translate(${x * 0.22}px, ${y * 0.35}px)`;
+        btn.style.transition = 'transform 0.1s ease-out';
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0px, 0px)';
+        btn.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+      });
+    });
+
+    // ==========================================================================
+    // 7. BARRA DE LEITURA EM LASER NO TOPO (SCROLL PROGRESS)
+    // ==========================================================================
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('scrollProgressBar');
+      if (bar) bar.style.width = scrolled + '%';
+    }, { passive: true });
+
+    // ==========================================================================
+    // 8. CONTADOR NUMÉRICO DINÂMICO NA ETAPA 05 (PROPOSTA COMERCIAL)
+    // ==========================================================================
+    const priceCounter = document.querySelector('.mockup-price-counter');
+    if (priceCounter) {
+      let counted = false;
+      const priceObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !counted) {
+            counted = true;
+            const target = 12840;
+            const duration = 1600;
+            const startTime = performance.now();
+            function animateCount(now) {
+              const elapsed = now - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              // Ease-out expo
+              const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+              const current = Math.floor(ease * target);
+              priceCounter.textContent = 'R$ ' + current.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              if (progress < 1) {
+                requestAnimationFrame(animateCount);
+              } else {
+                priceCounter.textContent = 'R$ 12.840,00';
+              }
+            }
+            requestAnimationFrame(animateCount);
+          }
+        });
+      }, { threshold: 0.3 });
+      priceObserver.observe(priceCounter);
+    }
+  </script>
+</body>
+
+</html>
